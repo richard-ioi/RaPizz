@@ -1,5 +1,5 @@
-CREATE DATABASE PIZZARAPIZZ;
-USE PIZZARAPIZZ;
+CREATE DATABASE RAPIZZ;
+USE RAPIZZ;
 
 CREATE TABLE Clients (
   id_client INT AUTO_INCREMENT,
@@ -19,13 +19,15 @@ CREATE TABLE Commande (
     id_client INT NOT NULL,
     id_livreur INT NOT NULL,
     id_vehicule INT NOT NULL,
+    prix INT NOT NULL,
+    taille VARCHAR(10) NOT NULL,
     depart_livraison DATETIME NOT NULL,
     arrive_livraison DATETIME NOT NULL,
     PRIMARY KEY (id_commande)
 );
 
 CREATE TABLE Livreur(
-   id_livreur INT,
+   id_livreur INT AUTO_INCREMENT,
    nom VARCHAR(50),
    prenom VARCHAR(50),
    retards VARCHAR(50),
@@ -43,8 +45,8 @@ CREATE TABLE Vehicule(
 CREATE TABLE Pizza(
 	id_pizza INT AUTO_INCREMENT,
     nom VARCHAR(20) NOT NULL,
-    taille VARCHAR(8) NOT NULL,
-    id_ingredients INT NOT NULL,
+    -- taille VARCHAR(8) NOT NULL,
+    -- id_ingredients INT NOT NULL,
     prix DECIMAL(10,2) NOT NULL,
     PRIMARY KEY (id_pizza)
 );
@@ -66,13 +68,18 @@ CREATE TABLE Pizza_Ingredients(
 );
 
 -- TABLE INTERMEDIAIRE MANY TO MANY PIZZA COMMANDE
-CREATE TABLE Commande_Pizza(
-    id_pizza INT,
-    id_commande INT,
-    CONSTRAINT fk_pizza_commande FOREIGN KEY (id_pizza) REFERENCES Pizza(id_pizza),
-    CONSTRAINT fk_commande FOREIGN KEY (id_commande) REFERENCES Commande(id_commande),
-    UNIQUE(id_pizza,id_commande)
-);
+-- CREATE TABLE Commande_Pizza(
+--     id_pizza INT,
+--     id_commande INT,
+--     CONSTRAINT fk_pizza_commande FOREIGN KEY (id_pizza) REFERENCES Pizza(id_pizza),
+--     CONSTRAINT fk_commande FOREIGN KEY (id_commande) REFERENCES Commande(id_commande),
+--     UNIQUE(id_pizza,id_commande)
+-- );
+
+
+-- CONTRAINTE CLE ETRANGERE RELATION ONE TO MANY PIZZA-COMMANDE
+ALTER TABLE Commande
+	ADD CONSTRAINT fk_commande_pizza FOREIGN KEY (id_pizza) REFERENCES Pizza(id_pizza);
 
 -- CONTRAINTE CLE ETRANGERE RELATION ONE TO MANY CLIENT-COMMANDE (un client passe plusieurs commandes, une commande est associée a un client)
 ALTER TABLE Commande
