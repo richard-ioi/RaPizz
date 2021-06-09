@@ -76,8 +76,8 @@ public class ClientsDAO implements Dao<Clients>{
             return clients;
         }
 
-        @SneakyThrows
-        public boolean deleteClients(Clients clients){
+        //@SneakyThrows
+      /*  public boolean deleteClients(Clients clients){
             if(clients ==  null || (Integer)clients.getIdClient() == null){
                 return false;
             }
@@ -96,7 +96,7 @@ public class ClientsDAO implements Dao<Clients>{
             }
             if(cache.containsKey(id)) cache.remove(id);
             return count >0;
-        }
+        }*/
 
 
 
