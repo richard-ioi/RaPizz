@@ -76,6 +76,28 @@ public class ClientsDAO implements Dao<Clients>{
             return clients;
         }
 
+        @SneakyThrows
+        public boolean deleteClients(Clients clients){
+            if(clients ==  null || (Integer)clients.getIdClient() == null){
+                return false;
+            }
+            Integer id = clients.getIdClient();
+            Statement statement = JdbcConnectDB.getConnection().createStatement();
+            int count =0;
+            if(statement == null) return false;
+            String query = " DELETE FROM Clients WHERE id_clients";
+            try{
+                count = statement.executeUpdate(query);
+            }catch (SQLException e){
+                logger.error("error executing: "+query, e);
+
+            }finally {
+                JdbcConnectDB.closeStatement(statement);
+            }
+            if(cache.containsKey(id)) cache.remove(id);
+            return count >0;
+        }
+
 
 
 

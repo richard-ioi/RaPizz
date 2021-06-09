@@ -40,6 +40,10 @@ public class JdbcConnectDB {
         }
         return connection;
     }
+
+    public static void closeStatement(Statement statement) throws SQLException {
+        statement.close();
+    }
     /* public static void main(String[] args) throws SQLException {
         String url = "jbdc:mysql:/RAPIZZ";
         String uname = "Admin";
