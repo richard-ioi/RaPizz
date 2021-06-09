@@ -11,10 +11,10 @@ import java.sql.Statement;
 
 
 public class JdbcConnectDB {
-    private static String url = "jbdc:mysql:/RAPIZZ";
+    private static String url = "jdbc:mysql://localhost:3306/RAPIZZ";
     private static String uname = "Admin";
     private static String password = "RichardEtEmilyMeritentUn20/20";
-    private static String driver = "com.mysql.jbdc.Driver";
+    private static String driver = "com.mysql.cj.jdbc.Driver";
     private static Connection connection = null;
 
     private static Logger logger = Logger.getLogger(JdbcConnectDB.class);
