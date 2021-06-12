@@ -7,6 +7,8 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
@@ -17,6 +19,7 @@ import java.sql.Statement;
 
 
 public class JdbcConnectDB {
+    private static JFrame IHM=new IHM(800,800);
     private static String url = "jdbc:mysql://localhost:3306/RAPIZZ";
     private static String uname = "Admin";
     private static String password = "RichardEtEmilyMeritentUn20/20";
@@ -24,7 +27,7 @@ public class JdbcConnectDB {
     private static Connection connection = null;
 
     private static Logger logger = Logger.getLogger(JdbcConnectDB.class);
-    private JdbcConnectDB(){}
+    public JdbcConnectDB(){}
 
     public static Connection getConnection() throws SQLException {
         if(connection == null){
@@ -52,6 +55,10 @@ public class JdbcConnectDB {
         statement.close();
     }
 
+    public static void printTest(){
+        System.out.println("TEST");
+    }
+
     public static void main(String[] arg) throws SQLException
     {
         BasicConfigurator.configure();
@@ -62,11 +69,12 @@ public class JdbcConnectDB {
         //clientsDAO.findClientsById(2);
         JFrame f = new IHM(800,800);
         f.addWindowListener(new WindowAdapter() {
+        IHM.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e)
             {
                 System.exit(0);
             }} );
-        f.setVisible(true);
+        IHM.setVisible(true);
     }
 
     /* public static void main(String[] args) throws SQLException {
