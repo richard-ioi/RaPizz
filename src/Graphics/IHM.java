@@ -1,13 +1,14 @@
 package Graphics;
 
+import DataAccess.IHM_Listener;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class IHM extends JFrame
-        implements ActionListener {
+public class IHM extends JFrame implements ActionListener {
 
-    JButton boutonOngletMenu;
+    public JButton boutonOngletMenu;
     JButton boutonOngletCommandes;
     JButton boutonOngletDonneesBrutes;
     JPanel onglets;
@@ -18,6 +19,7 @@ public class IHM extends JFrame
     JTextField querryDonneesBrutes;
     int Largeur;
     int Hauteur;
+    ActionListener IHM_Listener=new IHM_Listener();
 
     public IHM(int largeur, int hauteur) {
         Largeur=largeur;
@@ -83,7 +85,9 @@ public class IHM extends JFrame
         querryDonneesBrutes = new JTextField(60);
         querryDonneesBrutes.setSize(60,60);
         haut.add(querryDonneesBrutes);
-        haut.add(new JButton("Exécuter la requête SQL"));
+        JButton execQuerryBrutes=new JButton("Exécuter la requête SQL");
+        execQuerryBrutes.addActionListener(IHM_Listener);
+        haut.add(execQuerryBrutes);
         JTable resultsTab=new JTable(1,5);
         bas.add(resultsTab);
         //donneesBrutes.add(new Label("Bienvenue sur l'onglet données brutes"));
