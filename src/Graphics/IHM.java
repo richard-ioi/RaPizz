@@ -6,10 +6,12 @@ import DataAccess.IHM_MouseListener;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class IHM extends JFrame implements ActionListener {
 
-    public static JButton boutonOngletMenu;
+    public JTextField querryDonneesBrutes;
+    JButton boutonOngletMenu;
     JButton boutonOngletCommandes;
     JButton boutonOngletDonneesBrutes;
     JPanel onglets;
@@ -19,7 +21,9 @@ public class IHM extends JFrame implements ActionListener {
     JPanel donneesBrutesWindow;
     JPanel menuInnerPanel;
     JPanel commandesInnerPanel;
-    JTextField querryDonneesBrutes;
+    JTable commandesJTable;
+    JTable donneesBrutesJTable;
+    Object currentWindow;
     int LargeurFenetre;
     int HauteurFenetre;
 
@@ -38,6 +42,8 @@ public class IHM extends JFrame implements ActionListener {
         onglets.add(boutonOngletMenu);
         onglets.add(boutonOngletCommandes);
         onglets.add(boutonOngletDonneesBrutes);
+        commandesJTable=new JTable();
+        donneesBrutesJTable=new JTable();
         boutonOngletMenu.addActionListener(this);
         boutonOngletCommandes.addActionListener(this);
         boutonOngletDonneesBrutes.addActionListener(this);
@@ -48,6 +54,7 @@ public class IHM extends JFrame implements ActionListener {
         createHautFenetre("Menu");
         add(hautFenetre, BorderLayout.NORTH);
         add(menuWindow, BorderLayout.CENTER);
+        currentWindow=menuWindow;
         setSize(LargeurFenetre,HauteurFenetre);
         setResizable(false);
     }
@@ -68,15 +75,15 @@ public class IHM extends JFrame implements ActionListener {
         commandesList.add(commandesInnerPanel);
         commandesList.setPreferredSize(new Dimension(LargeurFenetre-10,(HauteurFenetre/3)*2));
         commandesWindow.add(commandesList);
-        commandesWindow.add(new Label("Résultats Requête"));
+        commandesWindow.add(commandesJTable);
     }
 
     public void createDonneesBrutesWindow(){
         donneesBrutesWindow = new JPanel();
         JPanel haut = new JPanel();
         JPanel bas = new JPanel();
-        querryDonneesBrutes = new JTextField(60);
-        querryDonneesBrutes.setSize(60,60);
+        querryDonneesBrutes = new JTextField(50);
+        querryDonneesBrutes.setSize(30,30);
         haut.add(querryDonneesBrutes);
         JButton execQuerryBrutes=new JButton("Exécuter la requête SQL");
         execQuerryBrutes.addActionListener(new IHM_ActionListener(this));
@@ -85,29 +92,6 @@ public class IHM extends JFrame implements ActionListener {
         bas.add(resultsTab);
         donneesBrutesWindow.add(haut,BorderLayout.NORTH);
         donneesBrutesWindow.add(bas);
-    }
-
-    public void createCommandesInnerPanel(int IDCommande, int IDClient, String NomClient, int IDPizza, String NomPizza, int IDLivreur, String NomLivreur, String DepartLivraison, String ArriveeLivraison){
-        JPanel commandeBlock = new JPanel();
-        commandeBlock.setLayout(new GridLayout(2,1));
-        JPanel haut=new JPanel();
-        JPanel bas=new JPanel();
-        haut.setLayout(new GridLayout(1,1));
-        JLabel commandeIDLabel=new JLabel("COMMANDE ID : "+IDCommande);
-        commandeIDLabel.setForeground(Color.white);
-        haut.add(commandeIDLabel);
-        haut.setBackground(Color.DARK_GRAY);
-        bas.setLayout(new GridLayout(1,5));
-        bas.add(createCell("CLIENT",IDClient,NomClient));
-        bas.add(createCell("PIZZA",IDPizza,NomPizza));
-        bas.add(createCell("LIVREUR",IDLivreur,NomLivreur));
-        bas.add(createCell("",0,DepartLivraison));
-        bas.add(createCell("",0,ArriveeLivraison));
-        commandeBlock.add(haut);
-        commandeBlock.add(bas);
-        commandeBlock.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
-        commandesInnerPanel.add(commandeBlock);
-        commandesInnerPanel.add(createBlankPanel());
     }
 
     public void createMenuInnerPanel(String nomPizza, String Liste_Ingredients, int prix_naine, int prix_normal, int prix_ogresse){
@@ -135,6 +119,66 @@ public class IHM extends JFrame implements ActionListener {
         pizzaBlock.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
         menuInnerPanel.add(pizzaBlock);
         menuInnerPanel.add(createBlankPanel());
+    }
+
+    public void createCommandesInnerPanel(int IDCommande, int IDClient, String NomClient, int IDPizza, String NomPizza, int IDLivreur, String NomLivreur, String DepartLivraison, String ArriveeLivraison){
+        JPanel commandeBlock = new JPanel();
+        commandeBlock.setLayout(new GridLayout(2,1));
+        JPanel haut=new JPanel();
+        JPanel bas=new JPanel();
+        haut.setLayout(new GridLayout(1,1));
+        JLabel commandeIDLabel=new JLabel("COMMANDE ID : "+IDCommande);
+        commandeIDLabel.setForeground(Color.white);
+        haut.add(commandeIDLabel);
+        haut.setBackground(Color.DARK_GRAY);
+        bas.setLayout(new GridLayout(1,5));
+        bas.add(createCell("CLIENT",IDClient,NomClient));
+        bas.add(createCell("PIZZA",IDPizza,NomPizza));
+        bas.add(createCell("LIVREUR",IDLivreur,NomLivreur));
+        bas.add(createCell("",0,DepartLivraison));
+        bas.add(createCell("",0,ArriveeLivraison));
+        commandeBlock.add(haut);
+        commandeBlock.add(bas);
+        commandeBlock.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+        commandesInnerPanel.add(commandeBlock);
+        commandesInnerPanel.add(createBlankPanel());
+    }
+
+    public void createCommandesJTable(String[][] cellules, String[] columnNames){
+        commandesJTable=new JTable(new DefaultTableModel(cellules,columnNames));
+        reBuildIHM();
+    }
+
+    public void createDonneesBrutesJTable(String[][] cellules, String[] columnNames){
+        donneesBrutesJTable=new JTable(new DefaultTableModel(cellules,columnNames));
+        reBuildIHM();
+    }
+
+    public void reBuildIHM(){
+        getContentPane().removeAll();
+
+        createMenuWindow();
+        createCommandesWindow();
+        createDonneesBrutesWindow();
+
+        if (currentWindow == menuWindow){
+            createHautFenetre("Menu");
+            getContentPane().add(hautFenetre, BorderLayout.NORTH);
+            getContentPane().add(menuWindow);
+        }
+        if (currentWindow == commandesWindow){
+            createHautFenetre("Commandes");
+            getContentPane().add(hautFenetre, BorderLayout.NORTH);
+            getContentPane().add(commandesWindow);
+        }
+        if (currentWindow == donneesBrutesWindow){
+            createHautFenetre("Données Brutes");
+            getContentPane().add(hautFenetre, BorderLayout.NORTH);
+            getContentPane().add(donneesBrutesWindow);
+        }
+
+        repaint();
+        printAll(getGraphics());
     }
 
     private JPanel createCell(String Type, int ID, String text){
@@ -184,16 +228,19 @@ public class IHM extends JFrame implements ActionListener {
             createHautFenetre("Menu");
             getContentPane().add(hautFenetre, BorderLayout.NORTH);
             getContentPane().add(menuWindow);
+            currentWindow=menuWindow;
         }
         if (source == boutonOngletCommandes){
             createHautFenetre("Commandes");
             getContentPane().add(hautFenetre, BorderLayout.NORTH);
             getContentPane().add(commandesWindow);
+            currentWindow=commandesWindow;
         }
         if (source == boutonOngletDonneesBrutes){
             createHautFenetre("Données Brutes");
             getContentPane().add(hautFenetre, BorderLayout.NORTH);
             getContentPane().add(donneesBrutesWindow);
+            currentWindow=donneesBrutesWindow;
         }
         repaint();
         printAll(getGraphics());

@@ -11,9 +11,11 @@ public class IHM_MouseListener implements MouseListener {
     }
     @Override
     public void mouseClicked(MouseEvent e) {
-        // the user clicks on the label
         if(Type=="CLIENT"){
-            //JbdcConnectDB.selectCLient(ID);
+            // Créer une fonction selectClient (ID fourni en paramètre)
+            // puis utiliser IHM.createCommandesJTable pour créer le résultat
+            // dans l'IHM
+            //JbdcConnectDB.selectClient(ID);
         }
         if(Type=="PIZZA"){
             //JbdcConnectDB.selectPizza(ID);
