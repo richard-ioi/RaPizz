@@ -197,15 +197,4 @@ public class IHM extends JFrame
         repaint();
         printAll(getGraphics());//Extort print all content
     }
-
-    public static void main(String[] arg)
-    {
-        JFrame f = new IHM(800,800);
-        f.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e)
-            {
-                System.exit(0);
-            }} );
-        f.setVisible(true);
-    }
 }

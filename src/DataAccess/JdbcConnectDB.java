@@ -1,8 +1,12 @@
 package DataAccess;
 
 import Dao.ClientsDAO;
+import Graphics.IHM;
 import org.apache.log4j.Logger;
 
+import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -44,6 +48,18 @@ public class JdbcConnectDB {
     public static void closeStatement(Statement statement) throws SQLException {
         statement.close();
     }
+
+    public static void main(String[] arg) throws SQLException
+    {
+        JFrame f = new IHM(800,800);
+        f.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e)
+            {
+                System.exit(0);
+            }} );
+        f.setVisible(true);
+    }
+
     /* public static void main(String[] args) throws SQLException {
         String url = "jbdc:mysql:/RAPIZZ";
         String uname = "Admin";
