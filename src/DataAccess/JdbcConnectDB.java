@@ -35,7 +35,7 @@ public class JdbcConnectDB {
         }
         catch(ClassNotFoundException e){
             e.printStackTrace();
-            logger.error("connection failed ", e);
+            logger.error("connection failed : ", e);
             throw new SQLException(e);
         }
         return connection;

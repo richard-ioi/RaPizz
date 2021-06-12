@@ -22,7 +22,7 @@ public class ClientsDAO implements Dao<Clients>{
          * @param id
          * @return
          */
-        public Clients findClientsById(int id){
+        public static Clients findClientsById(int id){
             if(cache.containsKey(id)){
                 return cache.get(id);
             }
@@ -30,21 +30,37 @@ public class ClientsDAO implements Dao<Clients>{
             return clients.get(0);
         }
 
+        /**
+         * Finds customer that has spent the most.
+         * @return the customer
+         */
+        public static Clients findClientMostSpendings(){
+            if(cache.isEmpty()){
+                //logger.debug("il n'y a pas de clients enregistrés");
+                System.out.println("il n'y a pas de clients enregistrés");
+                return null;
+            }
+            List<Clients> clients = find("WHERE (id, depenses) IN (SELECT id, MAX(depenses) FROM Clients GROUP BY id");
+            //logger.debug(clients.toString());
+            System.out.println(clients.toString());
+            return clients.get(0);
+        }
+
         @SneakyThrows
-        public List<Clients> find(String query) /*throws SQLException*/ {
+        public static List<Clients> find(String query) /*throws SQLException*/ {
             List<Clients> clientsList = new ArrayList<Clients>();
             Statement statement = JdbcConnectDB.getConnection().createStatement();
-
+            System.out.print(statement.toString());
             String sqlQuery = "SELECT * FROM Clients "+ query;
             try {
-                logger.debug("executing query : "+ sqlQuery);
+                //logger.debug("executing query : "+ sqlQuery);
                 ResultSet resultSet = statement.executeQuery(sqlQuery);
                 while( resultSet.next()){
                     Clients clients = resultSetToClients(resultSet);
                     clientsList.add(clients);
                 }
             } catch (SQLException sqlException){
-                logger.error("error executing: "+sqlQuery, sqlException);
+                //logger.error("error executing: "+sqlQuery, sqlException);
             } finally {
                 if(statement != null) try {
                     statement.close();
@@ -54,7 +70,7 @@ public class ClientsDAO implements Dao<Clients>{
             return clientsList;
         }
 
-        private Clients resultSetToClients(ResultSet resultSet) throws SQLException{
+        private static Clients resultSetToClients(ResultSet resultSet) throws SQLException{
             Clients clients = null;
 
             Integer id = resultSet.getInt("id_clients");
@@ -72,7 +88,7 @@ public class ClientsDAO implements Dao<Clients>{
 
             if(! cache.containsKey(id)) cache.put(id, clients);
 
-            logger.info("get clients for order "+clients.getNom());
+            //logger.info("get clients for order "+clients.getNom());
             return clients;
         }
 
@@ -99,6 +115,8 @@ public class ClientsDAO implements Dao<Clients>{
         }*/
 
 
-
+    public static void main(String[] args) {
+        findClientsById(2);
+    }
 
     }
