@@ -1,7 +1,9 @@
 package DataAccess;
 
 import Dao.ClientsDAO;
+import Dao.CommandeDAO;
 import Graphics.IHM;
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
@@ -27,6 +29,7 @@ public class JdbcConnectDB {
     public static Connection getConnection() throws SQLException {
         if(connection == null){
             connection = makeConnection();
+            logger.info("Connection Made");
         }
         return connection;
     }
@@ -51,6 +54,12 @@ public class JdbcConnectDB {
 
     public static void main(String[] arg) throws SQLException
     {
+        BasicConfigurator.configure();
+        ClientsDAO clientsDAO = new ClientsDAO();
+        CommandeDAO commandeDAO = new CommandeDAO();
+        clientsDAO.findClientMostSpendings();
+        commandeDAO.setCommandePrice();
+        //clientsDAO.findClientsById(2);
         JFrame f = new IHM(800,800);
         f.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e)

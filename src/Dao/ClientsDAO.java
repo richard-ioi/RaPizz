@@ -22,11 +22,13 @@ public class ClientsDAO implements Dao<Clients>{
          * @param id
          * @return
          */
-        public  Clients findClientsById(int id){
+        public Clients findClientsById(int id) throws SQLException {
             if(cache.containsKey(id)){
+                logger.debug("Client in cache");
                 return cache.get(id);
             }
-            List<Clients> clients = find("WHERE id_clients = "+id);
+            logger.debug("Finding clients");
+            List<Clients> clients = find("SELECT * FROM Clients WHERE id_client= "+id);
             return clients.get(0);
         }
 
@@ -34,33 +36,27 @@ public class ClientsDAO implements Dao<Clients>{
          * Finds customer that has spent the most.
          * @return the customer
          */
-        public Clients findClientMostSpendings(){
-            if(cache.isEmpty()){
-                //logger.debug("il n'y a pas de clients enregistrés");
-                System.out.println("il n'y a pas de clients enregistrés");
-                return null;
-            }
-            List<Clients> clients = find("WHERE (id, depenses) IN (SELECT id, MAX(depenses) FROM Clients GROUP BY id");
-            //logger.debug(clients.toString());
-            System.out.println(clients.toString());
+        public Clients findClientMostSpendings() throws SQLException {
+            List<Clients> clients = find("select * from Clients where depenses=(select max(depenses) from Clients);");
+            logger.info("best client : " + clients.toString());
             return clients.get(0);
         }
 
         @SneakyThrows
-        public List<Clients> find(String query) /*throws SQLException*/ {
-            List<Clients> clientsList = new ArrayList<Clients>();
+        public List<Clients> find(String query)throws SQLException {
+            List<Clients> clientsList = new ArrayList<>();
             Statement statement = JdbcConnectDB.getConnection().createStatement();
             System.out.print(statement.toString());
-            String sqlQuery = "SELECT * FROM Clients "+ query;
+            String sqlQuery = /*"SELECT * FROM Clients "+ */query;
             try {
-                //logger.debug("executing query : "+ sqlQuery);
+                logger.debug("executing query : "+ sqlQuery);
                 ResultSet resultSet = statement.executeQuery(sqlQuery);
                 while( resultSet.next()){
                     Clients clients = resultSetToClients(resultSet);
                     clientsList.add(clients);
                 }
             } catch (SQLException sqlException){
-                //logger.error("error executing: "+sqlQuery, sqlException);
+                logger.error("error executing: "+sqlQuery, sqlException);
             } finally {
                 if(statement != null) try {
                     statement.close();
@@ -73,7 +69,7 @@ public class ClientsDAO implements Dao<Clients>{
         private Clients resultSetToClients(ResultSet resultSet) throws SQLException{
             Clients clients = null;
 
-            Integer id = resultSet.getInt("id_clients");
+            Integer id = resultSet.getInt("id_client");
             if(cache.containsKey(id)) clients =cache.get(id);
             else clients = new Clients();
 
@@ -88,31 +84,8 @@ public class ClientsDAO implements Dao<Clients>{
 
             if(! cache.containsKey(id)) cache.put(id, clients);
 
-            //logger.info("get clients for order "+clients.getNom());
+            logger.info("get clients for order "+clients.toString());
             return clients;
         }
-
-        //@SneakyThrows
-      /*  public boolean deleteClients(Clients clients){
-            if(clients ==  null || (Integer)clients.getIdClient() == null){
-                return false;
-            }
-            Integer id = clients.getIdClient();
-            Statement statement = JdbcConnectDB.getConnection().createStatement();
-            int count =0;
-            if(statement == null) return false;
-            String query = " DELETE FROM Clients WHERE id_clients";
-            try{
-                count = statement.executeUpdate(query);
-            }catch (SQLException e){
-                logger.error("error executing: "+query, e);
-
-            }finally {
-                JdbcConnectDB.closeStatement(statement);
-            }
-            if(cache.containsKey(id)) cache.remove(id);
-            return count >0;
-        }*/
-
 
     }

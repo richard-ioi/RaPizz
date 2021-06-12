@@ -11,11 +11,11 @@ import java.util.List;
 @NoArgsConstructor
 public class ClientsController {
     private ClientsDAO clientsDAO;
-
+/*
     public  List<Clients> getAllClients(){
         List<Clients> clientsList = clientsDAO.find("");
         System.out.print(clientsList.toString());
         return clientsList;
-    }
+    }*/
 
 }

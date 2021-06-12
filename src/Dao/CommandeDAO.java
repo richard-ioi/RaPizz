@@ -22,20 +22,26 @@ public class CommandeDAO {
      * @param id
      * @return
      */
-    public Commande findCommandeById(int id){
+    public Commande findCommandeById(int id) throws SQLException {
         if(cache.containsKey(id)){
             return cache.get(id);
         }
-        List<Commande> commande = find("WHERE id_commande = "+id);
+        List<Commande> commande = find("SELECT * FROM Commande WHERE id_commande = "+id);
+        return commande.get(0);
+    }
+    public Commande setCommandePrice() throws SQLException {
+        updateCommande("UPDATE Commande SET Commande.prix=(SELECT prix FROM Pizza WHERE Commande.id_pizza=Pizza.id_pizza)");
+        List<Commande> commande = find("SELECT * FROM Commande");
         return commande.get(0);
     }
 
-    @SneakyThrows
-    public List<Commande> find(String query) /*throws SQLException*/ {
+    //COMMANDE SET PRIX_COMMANDE=PRIX_PIZZA-((1/3)*PRIX_PIZZA) WHERE taille="naine";
+
+    public List<Commande> find(String query) throws SQLException {
         List<Commande> commandeList = new ArrayList<>();
         Statement statement = JdbcConnectDB.getConnection().createStatement();
 
-        String sqlQuery = "SELECT * FROM Commande "+ query;
+        String sqlQuery = query;
         try {
             logger.debug("executing query : "+ sqlQuery);
             ResultSet resultSet = statement.executeQuery(sqlQuery);
@@ -53,6 +59,24 @@ public class CommandeDAO {
         }
         return commandeList;
     }
+    public void updateCommande(String query) throws SQLException {
+        List<Commande> commandeList = new ArrayList<>() ;
+        Statement statement = JdbcConnectDB.getConnection().createStatement();
+
+        String sqlQuery = query;
+        try {
+            logger.debug("executing update : "+ sqlQuery);
+            statement.executeUpdate(sqlQuery);
+        } catch (SQLException sqlException){
+            logger.error("error executing: "+sqlQuery, sqlException);
+        } finally {
+            if(statement != null) try {
+                statement.close();
+            }catch (SQLException e){}
+
+        }
+    }
+    //public Commande
     private Commande resultSetToCommande(ResultSet resultSet) throws SQLException{
         Commande commande = null;
 
