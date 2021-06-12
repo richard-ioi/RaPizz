@@ -14,15 +14,15 @@ import java.util.List;
 
 
 public class ClientsDAO implements Dao<Clients>{
-        private static final Logger logger = Logger.getLogger(ClientsDAO.class);
-        private static HashMap<Integer, Clients> cache= new HashMap<Integer, Clients>();
+        private  final Logger logger = Logger.getLogger(ClientsDAO.class);
+        private  HashMap<Integer, Clients> cache= new HashMap<Integer, Clients>();
 
         /**
          * Returns Client that matches the id param.
          * @param id
          * @return
          */
-        public static Clients findClientsById(int id){
+        public  Clients findClientsById(int id){
             if(cache.containsKey(id)){
                 return cache.get(id);
             }
@@ -34,7 +34,7 @@ public class ClientsDAO implements Dao<Clients>{
          * Finds customer that has spent the most.
          * @return the customer
          */
-        public static Clients findClientMostSpendings(){
+        public Clients findClientMostSpendings(){
             if(cache.isEmpty()){
                 //logger.debug("il n'y a pas de clients enregistrés");
                 System.out.println("il n'y a pas de clients enregistrés");
@@ -47,7 +47,7 @@ public class ClientsDAO implements Dao<Clients>{
         }
 
         @SneakyThrows
-        public static List<Clients> find(String query) /*throws SQLException*/ {
+        public List<Clients> find(String query) /*throws SQLException*/ {
             List<Clients> clientsList = new ArrayList<Clients>();
             Statement statement = JdbcConnectDB.getConnection().createStatement();
             System.out.print(statement.toString());
@@ -70,7 +70,7 @@ public class ClientsDAO implements Dao<Clients>{
             return clientsList;
         }
 
-        private static Clients resultSetToClients(ResultSet resultSet) throws SQLException{
+        private Clients resultSetToClients(ResultSet resultSet) throws SQLException{
             Clients clients = null;
 
             Integer id = resultSet.getInt("id_clients");
@@ -114,9 +114,5 @@ public class ClientsDAO implements Dao<Clients>{
             return count >0;
         }*/
 
-
-    public static void main(String[] args) {
-        findClientsById(2);
-    }
 
     }
