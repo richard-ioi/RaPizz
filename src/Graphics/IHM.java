@@ -21,6 +21,7 @@ public class IHM extends JFrame implements ActionListener {
     JPanel donneesBrutesWindow;
     JPanel menuInnerPanel;
     JPanel commandesInnerPanel;
+    JPanel commandesStatsPanel;
     JTable commandesJTable;
     JTable donneesBrutesJTable;
     String currentWindow;
@@ -33,9 +34,11 @@ public class IHM extends JFrame implements ActionListener {
         onglets = new JPanel();
         menuInnerPanel=new JPanel();
         commandesInnerPanel=new JPanel();
+        commandesStatsPanel=new JPanel();
         onglets.setLayout(new GridLayout(1,3));
         menuInnerPanel.setLayout(new BoxLayout(menuInnerPanel,BoxLayout.PAGE_AXIS));
         commandesInnerPanel.setLayout(new BoxLayout(commandesInnerPanel,BoxLayout.PAGE_AXIS));
+        commandesStatsPanel.setLayout(new GridLayout(1,3));
         boutonOngletMenu = new JButton("Menu");
         boutonOngletCommandes=new JButton("Commandes");
         boutonOngletDonneesBrutes=new JButton("Données brutes");
@@ -68,10 +71,7 @@ public class IHM extends JFrame implements ActionListener {
     public void createCommandesWindow(){
         commandesWindow = new JPanel();
         commandesWindow.setLayout(new FlowLayout(FlowLayout.CENTER));
-        JPanel stats= new JPanel();
-        stats.add(new Label("Meilleur livreur :"));
-        stats.add(new Label("Meilleur client :"));
-        commandesWindow.add(stats);
+        commandesWindow.add(commandesStatsPanel);
         ScrollPane commandesList=new ScrollPane();
         commandesList.add(commandesInnerPanel);
         commandesList.setPreferredSize(new Dimension(LargeurFenetre-10,(HauteurFenetre/3)*2));
@@ -89,8 +89,7 @@ public class IHM extends JFrame implements ActionListener {
         JButton execQuerryBrutes=new JButton("Exécuter la requête SQL");
         execQuerryBrutes.addActionListener(new IHM_ActionListener(this));
         haut.add(execQuerryBrutes);
-        JTable resultsTab=new JTable(1,5);
-        bas.add(resultsTab);
+        bas.add(donneesBrutesJTable);
         donneesBrutesWindow.add(haut,BorderLayout.NORTH);
         donneesBrutesWindow.add(bas);
     }
@@ -143,6 +142,15 @@ public class IHM extends JFrame implements ActionListener {
         commandeBlock.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
         commandesInnerPanel.add(commandeBlock);
         commandesInnerPanel.add(createBlankPanel());
+    }
+
+    public void createCommandesStatsPanel(String meilleurLivreur, String meilleurClient){
+        commandesStatsPanel=new JPanel();
+        commandesStatsPanel.setLayout(new GridLayout(1,3));
+        commandesStatsPanel.add(new Label("Meilleur livreur : "+meilleurLivreur));
+        commandesStatsPanel.add(createBlankPanel());
+        commandesStatsPanel.add(new Label("Meilleur client :"+meilleurClient));
+        reBuildIHM();
     }
 
     public void createCommandesJTable(String[][] cellules, String[] columnNames){

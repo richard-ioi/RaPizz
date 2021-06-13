@@ -72,7 +72,7 @@ public class JdbcConnectDB {
     }
 
     private static Connection makeConnection() throws SQLException {
-        /*try {
+        try {
             Class c = Class.forName(driver);
             // load the database driver class.
             connection = DriverManager.getConnection(url, uname, password);
@@ -81,7 +81,7 @@ public class JdbcConnectDB {
             e.printStackTrace();
             logger.error("connection failed : ", e);
             throw new SQLException(e);
-        }*/
+        }
         return connection;
     }
 
