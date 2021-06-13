@@ -6,6 +6,7 @@ import java.awt.event.*;
 public class IHM_MouseListener implements MouseListener {
     String Type;
     int ID;
+    //private JdbcConnectDB JbdcConnectDB;
 
     public IHM_MouseListener (String pType, int pID){
         Type=pType;
@@ -17,9 +18,8 @@ public class IHM_MouseListener implements MouseListener {
             // Créer une fonction selectClient (ID fourni en paramètre)
             // puis utiliser IHM.createCommandesJTable pour créer le résultat
             // dans l'IHM
-            //JbdcConnectDB.selectClient(ID);
-            JdbcConnectDB.getClientById(ID);
 
+            JdbcConnectDB.getClientById(ID);
         }
         if(Type=="PIZZA"){
             //JbdcConnectDB.selectPizza(ID);
