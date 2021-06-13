@@ -19,13 +19,24 @@ import java.sql.Statement;
 
 
 public class JdbcConnectDB {
-    private static JFrame IHM=new IHM(800,800);
+    private static IHM IHM=new IHM(800,800);
     private static String url = "jdbc:mysql://localhost:3306/RAPIZZ";
     private static String uname = "Admin";
     private static String password = "RichardEtEmilyMeritentUn20/20";
     private static String driver = "com.mysql.cj.jdbc.Driver";
     private static Connection connection = null;
 
+
+    //Fonction de test
+    /*public static void selectClient(int ID){
+        System.out.println(ID);
+        String[][] cellules=new String[1][1];
+        cellules[0][0]="LOL TEST";
+        String[] columnNames=new String[1];
+        columnNames[0]="NOM DE COLONNE TEST";
+
+        IHM.createCommandesJTable(cellules, columnNames);
+    }*/
     /**
      * Clients DAO
      */
@@ -68,7 +79,7 @@ public class JdbcConnectDB {
     }
 
     private static Connection makeConnection() throws SQLException {
-        try {
+        /*try {
             Class c = Class.forName(driver);
             // load the database driver class.
             connection = DriverManager.getConnection(url, uname, password);
@@ -77,7 +88,7 @@ public class JdbcConnectDB {
             e.printStackTrace();
             logger.error("connection failed : ", e);
             throw new SQLException(e);
-        }
+        }*/
         return connection;
     }
 
@@ -107,7 +118,7 @@ public class JdbcConnectDB {
     {
         BasicConfigurator.configure();
         //pizzaDAO.findPizzaById(2);
-        pizzaDAO.findMenuValue();
+        //pizzaDAO.findMenuValue();
         IHM.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e)
             {

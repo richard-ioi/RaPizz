@@ -23,7 +23,7 @@ public class IHM extends JFrame implements ActionListener {
     JPanel commandesInnerPanel;
     JTable commandesJTable;
     JTable donneesBrutesJTable;
-    Object currentWindow;
+    String currentWindow;
     int LargeurFenetre;
     int HauteurFenetre;
 
@@ -46,6 +46,7 @@ public class IHM extends JFrame implements ActionListener {
         donneesBrutesJTable=new JTable();
         boutonOngletMenu.addActionListener(this);
         boutonOngletCommandes.addActionListener(this);
+        boutonOngletCommandes.addMouseListener(new IHM_MouseListener("CLIENT",10));
         boutonOngletDonneesBrutes.addActionListener(this);
         createMenuWindow();
         createCommandesWindow();
@@ -54,7 +55,7 @@ public class IHM extends JFrame implements ActionListener {
         createHautFenetre("Menu");
         add(hautFenetre, BorderLayout.NORTH);
         add(menuWindow, BorderLayout.CENTER);
-        currentWindow=menuWindow;
+        currentWindow="menuWindow";
         setSize(LargeurFenetre,HauteurFenetre);
         setResizable(false);
     }
@@ -161,17 +162,17 @@ public class IHM extends JFrame implements ActionListener {
         createCommandesWindow();
         createDonneesBrutesWindow();
 
-        if (currentWindow == menuWindow){
+        if (currentWindow == "menuWindow"){
             createHautFenetre("Menu");
             getContentPane().add(hautFenetre, BorderLayout.NORTH);
             getContentPane().add(menuWindow);
         }
-        if (currentWindow == commandesWindow){
+        if (currentWindow == "commandesWindow"){
             createHautFenetre("Commandes");
             getContentPane().add(hautFenetre, BorderLayout.NORTH);
             getContentPane().add(commandesWindow);
         }
-        if (currentWindow == donneesBrutesWindow){
+        if (currentWindow == "donneesBrutesWindow"){
             createHautFenetre("Données Brutes");
             getContentPane().add(hautFenetre, BorderLayout.NORTH);
             getContentPane().add(donneesBrutesWindow);
@@ -228,19 +229,19 @@ public class IHM extends JFrame implements ActionListener {
             createHautFenetre("Menu");
             getContentPane().add(hautFenetre, BorderLayout.NORTH);
             getContentPane().add(menuWindow);
-            currentWindow=menuWindow;
+            currentWindow="menuWindow";
         }
         if (source == boutonOngletCommandes){
             createHautFenetre("Commandes");
             getContentPane().add(hautFenetre, BorderLayout.NORTH);
             getContentPane().add(commandesWindow);
-            currentWindow=commandesWindow;
+            currentWindow="commandesWindow";
         }
         if (source == boutonOngletDonneesBrutes){
             createHautFenetre("Données Brutes");
             getContentPane().add(hautFenetre, BorderLayout.NORTH);
             getContentPane().add(donneesBrutesWindow);
-            currentWindow=donneesBrutesWindow;
+            currentWindow="donneesBrutesWindow";
         }
         repaint();
         printAll(getGraphics());
