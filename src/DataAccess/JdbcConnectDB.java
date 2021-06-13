@@ -1,6 +1,7 @@
 package DataAccess;
 
 import Dao.*;
+import Domain.Clients;
 import Domain.Livreur;
 import Graphics.IHM;
 import org.apache.log4j.BasicConfigurator;
@@ -19,7 +20,7 @@ import java.sql.Statement;
 
 
 public class JdbcConnectDB {
-    private static JFrame IHM=new IHM(800,800);
+    private static IHM ihm=new IHM(800,800);
     private static String url = "jdbc:mysql://localhost:3306/RAPIZZ";
     private static String uname = "Admin";
     private static String password = "RichardEtEmilyMeritentUn20/20";
@@ -90,30 +91,52 @@ public class JdbcConnectDB {
     }
 
     /**
-     *
+     *Converts Clients object data into 2D String Array to be passed to GUI
      * @param id
      */
-    public static String[][] getLivreurById(int id){
+    public static void getClientById(int id){
+        Clients clients = clientsDAO.findClientsById(id);
+        String[][] clientString = new String[8][1];
+        clientString[0][0] = ""+clients.getIdClient();
+        clientString[1][0] = clients.getNom();
+        clientString[2][0] = clients.getPrenom();
+        clientString[3][0] = clients.getAdresse();
+        clientString[4][0] = clients.getTelephone();
+        clientString[5][0] = ""+clients.getSolde();
+        clientString[6][0] = ""+clients.getPizzaAchete();
+        clientString[7][0] = ""+clients.getDepenses();
+
+        ihm.createCommandesJTable(clientString, new String[]{"id_client", "nom", "prenom", "adresse", "telephone",
+         "solde", "pizza_achete","depenses"});
+    }
+
+    /**
+     *   Converts Livreur object data in 2D String Array to be passed to GUI
+     * @param id
+     */
+    public static void getLivreurById(int id){
         Livreur livreur = livreurDAO.findLivreurById(id);
-        String[][] livreurString = new String[0][];
+        String[][] livreurString = new String[4][1];
         livreurString[0][0] = ""+livreur.getIdLivreur();
-        livreurString[1][0] = livreur.getNom();
-        livreurString[2][0] = livreur.getPrenom();
+        livreurString[1][0] = livreur.getNom().toString();
+        livreurString[2][0] = livreur.getPrenom().toString();
         livreurString[3][0] = ""+livreur.getRetards();
 
-        return livreurString;
+        ihm.createCommandesJTable(livreurString, new String[]{"id_livreur", "nom", "prenom", "retards"});
     }
     public static void main(String[] arg) throws SQLException
     {
         BasicConfigurator.configure();
         //pizzaDAO.findPizzaById(2);
-        pizzaDAO.findMenuValue();
-        IHM.addWindowListener(new WindowAdapter() {
+
+
+        //pizzaDAO.findMenuValue();
+        ihm.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e)
             {
                 System.exit(0);
             }} );
-        IHM.setVisible(true);
+        ihm.setVisible(true);
 
     }
 

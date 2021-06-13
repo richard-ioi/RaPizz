@@ -22,7 +22,8 @@ public class ClientsDAO implements Dao<Clients>{
          * @param id
          * @return
          */
-        public Clients findClientsById(int id) throws SQLException {
+        @SneakyThrows
+        public Clients findClientsById(int id) {
             if(cache.containsKey(id)){
                 logger.debug("Client in cache");
                 return cache.get(id);
@@ -36,7 +37,8 @@ public class ClientsDAO implements Dao<Clients>{
          * Finds customer that has spent the most.
          * @return the customer
          */
-        public Clients findClientMostSpendings() throws SQLException {
+        @SneakyThrows
+        public Clients findClientMostSpendings()/* throws SQLException*/ {
             List<Clients> clients = find("select * from Clients where depenses=(select max(depenses) from Clients);");
             logger.info("best client : " + clients.toString());
             return clients.get(0);
