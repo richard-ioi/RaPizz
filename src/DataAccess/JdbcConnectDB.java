@@ -1,7 +1,7 @@
 package DataAccess;
 
-import Dao.ClientsDAO;
-import Dao.CommandeDAO;
+import Dao.*;
+import Domain.Livreur;
 import Graphics.IHM;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
@@ -25,6 +25,36 @@ public class JdbcConnectDB {
     private static String password = "RichardEtEmilyMeritentUn20/20";
     private static String driver = "com.mysql.cj.jdbc.Driver";
     private static Connection connection = null;
+
+    /**
+     * Clients DAO
+     */
+    private static ClientsDAO clientsDAO = new ClientsDAO();
+
+    /**
+     * Livreur DAO
+     */
+    private static LivreurDAO livreurDAO = new LivreurDAO();
+
+    /**
+     * Ingredients DAO
+     */
+    private static IngredientsDAO ingredientsDAO = new IngredientsDAO();
+
+    /**
+     * Commande DAO
+     */
+    private static CommandeDAO commandeDAO = new CommandeDAO();
+
+    /**
+     * Pizza DAO
+     */
+    private static PizzaDAO pizzaDAO = new PizzaDAO();
+
+    /**
+     *
+     */
+    private static VehiculeDAO vehiculeDAO = new VehiculeDAO();
 
     private static Logger logger = Logger.getLogger(JdbcConnectDB.class);
     public JdbcConnectDB(){}
@@ -59,42 +89,32 @@ public class JdbcConnectDB {
         System.out.println("TEST");
     }
 
+    /**
+     *
+     * @param id
+     */
+    public static String[][] getLivreurById(int id){
+        Livreur livreur = livreurDAO.findLivreurById(id);
+        String[][] livreurString = new String[0][];
+        livreurString[0][0] = ""+livreur.getIdLivreur();
+        livreurString[1][0] = livreur.getNom();
+        livreurString[2][0] = livreur.getPrenom();
+        livreurString[3][0] = ""+livreur.getRetards();
+
+        return livreurString;
+    }
     public static void main(String[] arg) throws SQLException
     {
         BasicConfigurator.configure();
-        ClientsDAO clientsDAO = new ClientsDAO();
-        CommandeDAO commandeDAO = new CommandeDAO();
-        clientsDAO.findClientMostSpendings();
-        commandeDAO.setCommandePrice();
-        //clientsDAO.findClientsById(2);
-        JFrame f = new IHM(800,800);
-        f.addWindowListener(new WindowAdapter() {
+        //pizzaDAO.findPizzaById(2);
+        pizzaDAO.findMenuValue();
         IHM.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e)
             {
                 System.exit(0);
             }} );
         IHM.setVisible(true);
+
     }
-
-    /* public static void main(String[] args) throws SQLException {
-        String url = "jbdc:mysql:/RAPIZZ";
-        String uname = "Admin";
-        String password = "RichardEtEmilyMeritentUn20/20";
-
-        try {
-            Class c = Class.forName("com.mysql.jbdc.Driver");
-        }
-        catch(ClassNotFoundException e){
-            e.printStackTrace();
-        }
-
-        try{
-            Connection con = DriverManager.getConnection(url,uname,password);
-        }
-        catch(SQLException e){
-            e.printStackTrace();
-        }
-    }*/
 
 }

@@ -64,7 +64,7 @@ CREATE TABLE Pizza_Ingredients(
     id_ingredient INT,
     CONSTRAINT fk_pizza FOREIGN KEY (id_pizza) REFERENCES Pizza(id_pizza),
     CONSTRAINT fk_ingredient FOREIGN KEY (id_ingredient) REFERENCES Ingredients(id_ingredient),
-    UNIQUE(id_pizza,id_ingredient)
+    PRIMARY KEY(id_pizza,id_ingredient)
 );
 
 -- TABLE INTERMEDIAIRE MANY TO MANY PIZZA COMMANDE

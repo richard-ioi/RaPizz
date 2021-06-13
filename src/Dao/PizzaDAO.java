@@ -29,6 +29,15 @@ public class PizzaDAO {
         return pizza.get(0);
     }
 
+    public Pizza findMenuValue(){
+        List<Pizza> pizzaList = find("SELECT * FROM Ingredients JOIN Pizza_Ingredients " +
+                "ON Ingredients.id_ingredient = Pizza_Ingredient.id_ingredient " +
+                "JOIN Pizza " +
+                "ON Pizza.id_pizza=Pizza_Ingredient.id_pizza " +
+                "WHERE Pizza.nom = 'insegnamento'");
+        return pizzaList.get(0);
+
+    }
     @SneakyThrows
     public List<Pizza> find(String query) /*throws SQLException*/ {
         List<Pizza> pizzaList = new ArrayList<>();
@@ -62,10 +71,11 @@ public class PizzaDAO {
         pizza.setIdPizza(id);
         pizza.setNom(resultSet.getString("nom"));
         pizza.setPrix(resultSet.getInt("prix"));
+        //pizza.setIngredientsList(resultSet.getArray(""));
 
         if(! cache.containsKey(id)) cache.put(id, pizza);
 
-        logger.info("get pizza for order "+pizza.getNom());
+        logger.info("get pizza for order "+pizza);
         return pizza;
     }
 }

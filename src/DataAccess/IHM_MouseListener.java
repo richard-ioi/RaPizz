@@ -1,4 +1,7 @@
 package DataAccess;
+
+import Graphics.IHM;
+
 import java.awt.event.*;
 
 public class IHM_MouseListener implements MouseListener {
@@ -16,12 +19,14 @@ public class IHM_MouseListener implements MouseListener {
             // puis utiliser IHM.createCommandesJTable pour créer le résultat
             // dans l'IHM
             //JbdcConnectDB.selectClient(ID);
+
         }
         if(Type=="PIZZA"){
             //JbdcConnectDB.selectPizza(ID);
         }
         if(Type=="LIVREUR"){
-            //JbdcConnectDB.selectLivreur(ID);
+
+            //IHM.createCommandesJTable(JdbcConnectDB.getLivreurById(ID), new String[]{"id_livreur", "nom", "prenom", "retards"});
         }
         System.out.println("TYPE="+Type+" ID="+ID);
 
