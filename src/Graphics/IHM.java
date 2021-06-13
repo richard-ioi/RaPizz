@@ -10,7 +10,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class IHM extends JFrame implements ActionListener {
 
-    public JTextField querryDonneesBrutes;
+    public JTextField queryDonneesBrutes;
     JButton boutonOngletMenu;
     JButton boutonOngletCommandes;
     JButton boutonOngletDonneesBrutes;
@@ -83,9 +83,9 @@ public class IHM extends JFrame implements ActionListener {
         donneesBrutesWindow = new JPanel();
         JPanel haut = new JPanel();
         JPanel bas = new JPanel();
-        querryDonneesBrutes = new JTextField(50);
-        querryDonneesBrutes.setSize(30,30);
-        haut.add(querryDonneesBrutes);
+        queryDonneesBrutes = new JTextField(50);
+        queryDonneesBrutes.setSize(30,30);
+        haut.add(queryDonneesBrutes);
         JButton execQuerryBrutes=new JButton("Exécuter la requête SQL");
         execQuerryBrutes.addActionListener(new IHM_ActionListener(this));
         haut.add(execQuerryBrutes);

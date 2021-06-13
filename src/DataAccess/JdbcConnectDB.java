@@ -12,11 +12,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 
 public class JdbcConnectDB {
@@ -72,7 +68,7 @@ public class JdbcConnectDB {
     }
 
     private static Connection makeConnection() throws SQLException {
-        /*try {
+        try {
             Class c = Class.forName(driver);
             // load the database driver class.
             connection = DriverManager.getConnection(url, uname, password);
@@ -81,7 +77,7 @@ public class JdbcConnectDB {
             e.printStackTrace();
             logger.error("connection failed : ", e);
             throw new SQLException(e);
-        }*/
+        }
         return connection;
     }
 
@@ -92,6 +88,40 @@ public class JdbcConnectDB {
     public static void printTest(){
         System.out.println("TEST");
     }
+    public static String[][] execQueryDonneesBrutes(String query){
+        try{
+            connection = getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            ResultSetMetaData metaData = result.getMetaData();
+            int nbColumns = metaData.getColumnCount();
+            logger.debug("Column nb : "+nbColumns);
+            String[][] resultatRequete = new String[4][5];
+            String[] columnNames = new String[nbColumns];
+            for(int i=1; i< nbColumns; i++){
+                columnNames[i] = metaData.getColumnName(i);
+            }
+            int rowCount =0;
+            while(result.next()){
+                for(int i=1; i<nbColumns; i++){
+                    if(result.getObject(i) ==  null){
+                        resultatRequete[rowCount][i]="null";
+                    }
+                    else{
+                        resultatRequete[rowCount][i]=result.getObject(i).toString();
+                    }
+                    logger.debug(result.getObject(i).toString());
+
+                }
+                rowCount++;
+            }
+            //ihm.createDonneesBrutesJTable(resultatRequete, columnNames);
+            return resultatRequete;
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+        return new String[1][1];
+    }
 
     /**
      *Converts Clients object data into 2D String Array to be passed to GUI
@@ -99,15 +129,15 @@ public class JdbcConnectDB {
      */
     public static void getClientById(int id){
         Clients clients = clientsDAO.findClientsById(id);
-        String[][] clientString = new String[8][1];
+        String[][] clientString = new String[1][8];
         clientString[0][0] = ""+clients.getIdClient();
-        clientString[1][0] = clients.getNom();
-        clientString[2][0] = clients.getPrenom();
-        clientString[3][0] = clients.getAdresse();
-        clientString[4][0] = clients.getTelephone();
-        clientString[5][0] = ""+clients.getSolde();
-        clientString[6][0] = ""+clients.getPizzaAchete();
-        clientString[7][0] = ""+clients.getDepenses();
+        clientString[0][1] = clients.getNom();
+        clientString[0][2] = clients.getPrenom();
+        clientString[0][3] = clients.getAdresse();
+        clientString[0][4] = clients.getTelephone();
+        clientString[0][5] = ""+clients.getSolde();
+        clientString[0][6] = ""+clients.getPizzaAchete();
+        clientString[0][7] = ""+clients.getDepenses();
 
         ihm.createCommandesJTable(clientString, new String[]{"id_client", "nom", "prenom", "adresse", "telephone",
          "solde", "pizza_achete","depenses"});
@@ -119,11 +149,11 @@ public class JdbcConnectDB {
      */
     public static void getLivreurById(int id){
         Livreur livreur = livreurDAO.findLivreurById(id);
-        String[][] livreurString = new String[4][1];
+        String[][] livreurString = new String[1][4];
         livreurString[0][0] = ""+livreur.getIdLivreur();
-        livreurString[1][0] = livreur.getNom().toString();
-        livreurString[2][0] = livreur.getPrenom().toString();
-        livreurString[3][0] = ""+livreur.getRetards();
+        livreurString[0][1] = livreur.getNom();
+        livreurString[0][2] = livreur.getPrenom();
+        livreurString[0][3] = ""+livreur.getRetards();
 
         ihm.createCommandesJTable(livreurString, new String[]{"id_livreur", "nom", "prenom", "retards"});
     }
@@ -131,8 +161,11 @@ public class JdbcConnectDB {
     {
         BasicConfigurator.configure();
         //pizzaDAO.findPizzaById(2);
-
-        //pizzaDAO.findMenuValue();
+        for(int i=0; i<8; i++){
+            for(int j=0; j<8; j++){
+                logger.debug(execQueryDonneesBrutes("SELECT * FROM Clients")[i][j]);
+            }
+        }
         ihm.addWindowListener(new WindowAdapter() {
 
             public void windowClosing(WindowEvent e)

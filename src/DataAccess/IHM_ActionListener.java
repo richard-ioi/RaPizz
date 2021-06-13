@@ -12,6 +12,6 @@ public class IHM_ActionListener implements ActionListener {
         //sous forme de STRING) puis utiliser IHM.createDonneesBrutesJTable pour
         // retourner une JTable avec les résultats de la requête
 
-        //JdbcConnectDB.execQuerryDonneesBrutes(View.querryDonneesBrutes.getText());
+        JdbcConnectDB.execQueryDonneesBrutes(View.queryDonneesBrutes.getText());
     }
 }
