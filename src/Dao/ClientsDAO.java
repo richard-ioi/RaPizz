@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class ClientsDAO implements Dao<Clients>{
+public class ClientsDAO {
         private  final Logger logger = Logger.getLogger(ClientsDAO.class);
         private  HashMap<Integer, Clients> cache= new HashMap<Integer, Clients>();
 

@@ -27,32 +27,32 @@ public class JdbcConnectDB {
 
 
     /**
-     * Clients DAO
+     * Clients DAO.
      */
     private static ClientsDAO clientsDAO = new ClientsDAO();
 
     /**
-     * Livreur DAO
+     * Livreur DAO.
      */
     private static LivreurDAO livreurDAO = new LivreurDAO();
 
     /**
-     * Ingredients DAO
+     * Ingredients DAO.
      */
     private static IngredientsDAO ingredientsDAO = new IngredientsDAO();
 
     /**
-     * Commande DAO
+     * Commande DAO.
      */
     private static CommandeDAO commandeDAO = new CommandeDAO();
 
     /**
-     * Pizza DAO
+     * Pizza DAO.
      */
     private static PizzaDAO pizzaDAO = new PizzaDAO();
 
     /**
-     *
+     *  Vehicule DAO.
      */
     private static VehiculeDAO vehiculeDAO = new VehiculeDAO();
 
@@ -88,43 +88,80 @@ public class JdbcConnectDB {
     public static void printTest(){
         System.out.println("TEST");
     }
-    public static String[][] execQueryDonneesBrutes(String query){
+
+    /**
+     * Counts rows in a query response
+     * @param query
+     * @return
+     */
+    public static int countRows(String query){
         try{
             connection = getConnection();
-            Statement statement = connection.createStatement();
+            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet result = statement.executeQuery(query);
+            result.last();
+            int nbRows = result.getRow();
+            result.first();
+            return nbRows;
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * Execute random query in GUI
+     * @param query
+     */
+    public static void execQueryDonneesBrutes(String query){
+        try{
+            connection = getConnection();
+            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ResultSet result = statement.executeQuery(query);
             ResultSetMetaData metaData = result.getMetaData();
             int nbColumns = metaData.getColumnCount();
-            logger.debug("Column nb : "+nbColumns);
-            String[][] resultatRequete = new String[4][5];
+            int nbRows = countRows(query);
+            //logger.debug("Column nb : "+nbColumns);
+            String[][] resultatRequete = new String[nbRows][nbColumns];
             String[] columnNames = new String[nbColumns];
             for(int i=1; i< nbColumns; i++){
                 columnNames[i] = metaData.getColumnName(i);
             }
             int rowCount =0;
-            while(result.next()){
-                for(int i=1; i<nbColumns; i++){
-                    if(result.getObject(i) ==  null){
-                        resultatRequete[rowCount][i]="null";
-                    }
-                    else{
-                        resultatRequete[rowCount][i]=result.getObject(i).toString();
-                    }
-                    logger.debug(result.getObject(i).toString());
+            while(result.next() && rowCount!=nbRows){
+                for(int i=1; i<=nbColumns; i++) {
+                        if (result.getObject(i).equals(null)) {
+                            logger.debug("is null");
+                            resultatRequete[rowCount][i-1] = "null";
+                        } else {
+                            resultatRequete[rowCount][i-1] = result.getObject(i).toString();
+                        }
 
                 }
                 rowCount++;
             }
-            //ihm.createDonneesBrutesJTable(resultatRequete, columnNames);
-            return resultatRequete;
+            ihm.createDonneesBrutesJTable(resultatRequete, columnNames);
+            //return resultatRequete;
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
-        return new String[1][1];
+        //return new String[1][1];
     }
 
     /**
-     *Converts Clients object data into 2D String Array to be passed to GUI
+     * Sends the best Client (with highest spendings) and the worst Livreur (most late delievries) to the GUI.
+     */
+    public static void getBestClientWorseLivreur(){
+        Clients client = clientsDAO.findClientMostSpendings();
+        Livreur livreur = livreurDAO.findWorseDeliveryGuy();
+        String livreurString = livreur.getPrenom()+ " " +livreur.getNom();
+        String clientString = client.getPrenom()+" "+client.getNom();
+        ihm.createCommandesStatsPanel(livreurString, clientString);
+        //return new String[]{clientString, livreurString};
+    }
+
+    /**
+     *Converts Clients object data into 2D String Array to be passed to GUI.
      * @param id
      */
     public static void getClientById(int id){
@@ -144,7 +181,7 @@ public class JdbcConnectDB {
     }
 
     /**
-     *   Converts Livreur object data in 2D String Array to be passed to GUI
+     *   Converts Livreur object data in 2D String Array to be passed to GUI.
      * @param id
      */
     public static void getLivreurById(int id){
@@ -157,15 +194,24 @@ public class JdbcConnectDB {
 
         ihm.createCommandesJTable(livreurString, new String[]{"id_livreur", "nom", "prenom", "retards"});
     }
+
+    /**
+     * Application main method, sets all the data and calls start up methods.
+     * @param arg
+     * @throws SQLException
+     */
     public static void main(String[] arg) throws SQLException
     {
         BasicConfigurator.configure();
-        //pizzaDAO.findPizzaById(2);
-        for(int i=0; i<8; i++){
+        commandeDAO.updateCommandePrice();
+        getBestClientWorseLivreur();
+        /*for(int i=0; i<8; i++){
             for(int j=0; j<8; j++){
                 logger.debug(execQueryDonneesBrutes("SELECT * FROM Clients")[i][j]);
             }
-        }
+
+        }*/
+        // faire fonction qui itere n fois la fonction de richard pour
         ihm.addWindowListener(new WindowAdapter() {
 
             public void windowClosing(WindowEvent e)

@@ -19,7 +19,7 @@ CREATE TABLE Commande (
     id_client INT NOT NULL,
     id_livreur INT NOT NULL,
     id_vehicule INT NOT NULL,
-    prix DECIMAL NOT NULL,
+    prix DECIMAL(10,2) NOT NULL,
     taille VARCHAR(10) NOT NULL,
     depart_livraison DATETIME NOT NULL,
     arrive_livraison DATETIME NOT NULL,

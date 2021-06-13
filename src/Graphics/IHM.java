@@ -144,10 +144,10 @@ public class IHM extends JFrame implements ActionListener {
         commandesInnerPanel.add(createBlankPanel());
     }
 
-    public void createCommandesStatsPanel(String meilleurLivreur, String meilleurClient){
+    public void createCommandesStatsPanel(String pireLivreur, String meilleurClient){
         commandesStatsPanel=new JPanel();
         commandesStatsPanel.setLayout(new GridLayout(1,3));
-        commandesStatsPanel.add(new Label("Meilleur livreur : "+meilleurLivreur));
+        commandesStatsPanel.add(new Label("Pire livreur : "+pireLivreur));
         commandesStatsPanel.add(createBlankPanel());
         commandesStatsPanel.add(new Label("Meilleur client :"+meilleurClient));
         reBuildIHM();

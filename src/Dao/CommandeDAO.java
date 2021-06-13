@@ -29,13 +29,20 @@ public class CommandeDAO {
         List<Commande> commande = find("SELECT * FROM Commande WHERE id_commande = "+id);
         return commande.get(0);
     }
-    public Commande setCommandePrice() throws SQLException {
-        updateCommande("UPDATE Commande SET Commande.prix=(SELECT prix FROM Pizza WHERE Commande.id_pizza=Pizza.id_pizza)");
-        List<Commande> commande = find("SELECT * FROM Commande");
-        return commande.get(0);
+    public void updateCommandePrice() throws SQLException {
+        updateCommande("UPDATE Commande " +
+                "INNER JOIN Pizza ON Commande.id_pizza=Pizza.id_pizza " +
+                "SET Commande.prix = CASE " +
+                "WHEN Commande.taille=\"humaine\" THEN Pizza.prix " +
+                "                        WHEN Commande.taille=\"naine\" THEN Pizza.prix-(Pizza.prix*(1/3)) " +
+                "                        WHEN Commande.taille=\"ogresse\" THEN Pizza.prix+(Pizza.prix*(1/3)) " +
+                "                        ELSE Commande.prix " +
+                "                        END " +
+                "WHERE Commande.taille in (\"humaine\",\"naine\",\"ogresse\");");
+        //List<Commande> commande = find("SELECT * FROM Commande");
+        //return commande.get(0);
     }
 
-    //COMMANDE SET PRIX_COMMANDE=PRIX_PIZZA-((1/3)*PRIX_PIZZA) WHERE taille="naine";
 
     public List<Commande> find(String query) throws SQLException {
         List<Commande> commandeList = new ArrayList<>();
@@ -59,6 +66,7 @@ public class CommandeDAO {
         }
         return commandeList;
     }
+
     public void updateCommande(String query) throws SQLException {
         List<Commande> commandeList = new ArrayList<>() ;
         Statement statement = JdbcConnectDB.getConnection().createStatement();

@@ -1,14 +1,14 @@
 USE RAPIZZ;
 
 INSERT INTO Clients(nom, prenom, adresse, telephone, solde, pizza_achete, depenses)
-VALUES('FOUQUOIRE', 'Richard', '1 rue Keble Oaks', NULL, 52.50, 12, 160),
+VALUES('FOUQUOIRE', 'Richard', '1 rue Keble Oaks', 0672374210, 52.50, 12, 160),
 	('LARSSON', 'Kastor', '314 Homefield Pines', '0672374210', 15.00, 0, 0),
     ('BATES', 'Madeline', '3a Craythorne Lane', '0143123477', 30.23, 1, 15.50),
-    ('ALESCIO', 'Thracius', '13 Thorpe Fairway', NULL, 3.01, 5, 75),
+    ('ALESCIO', 'Thracius', '13 Thorpe Fairway', 0672374210, 3.01, 5, 75),
     ('BASS', 'Ekaterina', '5 Colridge Court', '0798100023', 12.99, 1, 12.99),
     ('KATO', 'Gitta', '10 Lonsdale Hills', '0612101132', 120.57, 3, 42.50),
     ('PEYTON', 'Ivan', '57 Southview Isaf', '0233904598', 2.21, 2, 28.98),
-    ('BERNARDI', 'Dominika', '131 Barton Road', NULL, 15.90, 1, 14.50);
+    ('BERNARDI', 'Dominika', '131 Barton Road', 0672374210, 15.90, 1, 14.50);
 
 INSERT INTO Ingredients(nom, `type`)
 VALUES('mozzarella', 'fromage'), -- 1
@@ -55,10 +55,10 @@ INSERT INTO Livreur(nom, prenom, retards)
 VALUES('Chevalier', 'Leon', 0), ('Carrel', 'Gérald', 3), ('Rodin', 'Arlene', 7);
 
 INSERT INTO Commande(id_pizza, id_client, id_livreur, id_vehicule, prix, taille, depart_livraison, arrive_livraison)
-VALUES (1, 5, 2, 3, 10.50, 'humaine', '2005-03-30 19:32:47', '2005-03-30 20:03:03');
+VALUES (1, 5, 2, 3, 10.50, 'humaine', '2005-03-30 19:32:47', '2005-03-30 20:03:03'),
+		(2, 1, 2, 3, 10.50, 'naine', '2005-03-30 19:32:47', '2005-03-30 20:03:03'),
+        (3, 3, 1, 3, 10.50, 'ogresse', '2005-03-30 19:32:47', '2005-03-30 20:03:03'),
+        (4, 6, 3, 3, 10.50, 'humaine', '2005-03-30 19:32:47', '2005-03-30 20:03:03');
 
-
-    
-    
-    
+   
 

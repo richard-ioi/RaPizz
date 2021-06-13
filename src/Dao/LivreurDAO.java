@@ -35,7 +35,8 @@ public class LivreurDAO {
      * @return
      * @throws SQLException
      */
-    public Livreur findWorseDeliveryGuy() throws SQLException {
+    @SneakyThrows
+    public Livreur findWorseDeliveryGuy()  {
         List<Livreur> livreur = find("select * from Livreur where retards=(select max(retards) from Livreur);");
         logger.info(" Worse delivery guy : " + livreur.toString());
         return livreur.get(0);
