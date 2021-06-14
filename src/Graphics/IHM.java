@@ -19,6 +19,7 @@ public class IHM extends JFrame implements ActionListener {
     JPanel onglets;
     JPanel hautFenetre;
     ScrollPane menuWindow;
+    JPanel clientsInnerPanel;
     JPanel statsWindow;
     JPanel clientsWindow;
     JPanel commandesWindow;
@@ -33,14 +34,6 @@ public class IHM extends JFrame implements ActionListener {
     int LargeurFenetre;
     int HauteurFenetre;
 
-    // Extraction des clients ayant commandé plus que la moyenne
-    // Nombre de commandes par clients
-
-    // Moyenne des commandes
-    // Quels sont les véhicules n'ayant jamais servi
-    // Suivi du chiffre d'affaires
-    // Identification de la pizza la plus / la moins demandée
-    // Ingrédient favori
     public IHM(int largeur, int hauteur) {
         LargeurFenetre=largeur;
         HauteurFenetre=hauteur;
@@ -70,6 +63,7 @@ public class IHM extends JFrame implements ActionListener {
         commandesStatsPanel.setLayout(new GridLayout(1,3));
         commandesJTable=new JTable();
         donneesBrutesJTable=new JTable();
+        clientsInnerPanel=new JPanel();
     }
     public void createOngletButtons(){
         onglets = new JPanel();
@@ -98,6 +92,11 @@ public class IHM extends JFrame implements ActionListener {
 
     public void createClientsWindow(){
         clientsWindow=new JPanel();
+        clientsWindow.setLayout(new FlowLayout(FlowLayout.CENTER));
+        ScrollPane clientsList=new ScrollPane();
+        clientsList.add(clientsInnerPanel);
+        clientsList.setPreferredSize(new Dimension(LargeurFenetre-10,(HauteurFenetre)));
+        clientsWindow.add(clientsList);
     }
 
     public void createMenuWindow(){
@@ -146,9 +145,9 @@ public class IHM extends JFrame implements ActionListener {
         haut.setBackground(Color.DARK_GRAY);
         ingredients.add(new Label(Liste_Ingredients));
         prix.setLayout(new GridLayout(1,3));
-        prix.add(createDividedCell("Naine",prix_naine+"€"));
-        prix.add(createDividedCell("Normale",prix_normal+"€"));
-        prix.add(createDividedCell("Ogresse",prix_ogresse+"€"));
+        prix.add(createDividedCell("Naine",prix_naine+"€",Color.DARK_GRAY));
+        prix.add(createDividedCell("Normale",prix_normal+"€",Color.DARK_GRAY));
+        prix.add(createDividedCell("Ogresse",prix_ogresse+"€",Color.DARK_GRAY));
         bas.add(ingredients);
         bas.add(prix);
         pizzaBlock.add(haut);
@@ -169,11 +168,11 @@ public class IHM extends JFrame implements ActionListener {
         haut.add(commandeIDLabel);
         haut.setBackground(Color.DARK_GRAY);
         bas.setLayout(new GridLayout(1,5));
-        bas.add(createCell("CLIENT",IDClient,NomClient));
-        bas.add(createCell("PIZZA",IDPizza,NomPizza));
-        bas.add(createCell("LIVREUR",IDLivreur,NomLivreur));
-        bas.add(createCell("",0,DepartLivraison));
-        bas.add(createCell("",0,ArriveeLivraison));
+        bas.add(createCell("CLIENT",IDClient,NomClient,Color.DARK_GRAY));
+        bas.add(createCell("PIZZA",IDPizza,NomPizza,Color.DARK_GRAY));
+        bas.add(createCell("LIVREUR",IDLivreur,NomLivreur,Color.DARK_GRAY));
+        bas.add(createCell("",0,DepartLivraison,Color.DARK_GRAY));
+        bas.add(createCell("",0,ArriveeLivraison,Color.DARK_GRAY));
         commandeBlock.add(haut);
         commandeBlock.add(bas);
         commandeBlock.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
@@ -214,13 +213,6 @@ public class IHM extends JFrame implements ActionListener {
         JLabel pizzaPlusDemandeeLabel=new JLabel("Pizza la plus demandée : "+ pizzaPlusDemandee);
         JLabel pizzaMoinsDemandeeLabel=new JLabel("Pizza la moins demandée : "+pizzaMoinsDemandee);
         JLabel ingredientFavoriLabel=new JLabel("Ingrédient favori : "+ingredientFavori);
-        Font f=moyenneCommandesLabel.getFont();
-        moyenneCommandesLabel.setFont(f.deriveFont(f.getStyle() ^ Font.BOLD));
-        vehNonServisLabel.setFont(f.deriveFont(f.getStyle() ^ Font.BOLD));
-        chiffreDaffaireLabel.setFont(f.deriveFont(f.getStyle() ^ Font.BOLD));
-        pizzaPlusDemandeeLabel.setFont(f.deriveFont(f.getStyle() ^ Font.BOLD));
-        pizzaMoinsDemandeeLabel.setFont(f.deriveFont(f.getStyle() ^ Font.BOLD));
-        ingredientFavoriLabel.setFont(f.deriveFont(f.getStyle() ^ Font.BOLD));
         statsInnerPanel.add(moyenneCommandesLabel);
         statsInnerPanel.add(createBlankPanel());
         statsInnerPanel.add(chiffreDaffaireLabel);
@@ -234,26 +226,55 @@ public class IHM extends JFrame implements ActionListener {
         reBuildIHM();
     }
 
-    private JPanel createCell(String Type, int ID, String text){
+    // Extraction des clients ayant commandé plus que la moyenne
+    // Nombre de commandes par clients
+
+    public void createClientInnerPanel(int IDClient, String nomClient, int nbCommandes, boolean commandePlusQueLaMoyenne){
+        JPanel clientBlock = new JPanel();
+        Color c;
+        if(commandePlusQueLaMoyenne){
+            c=Color.GREEN;
+        }else{
+            c=Color.DARK_GRAY;
+        }
+        clientBlock.setLayout(new GridLayout(2,1));
+        JPanel haut=new JPanel();
+        JPanel bas=new JPanel();
+        haut.setLayout(new GridLayout(1,1));
+        JLabel IDClientLabel=new JLabel("ID Client: "+IDClient);
+        IDClientLabel.setForeground(Color.white);
+        haut.add(IDClientLabel);
+        haut.setBackground(c);
+        bas.setLayout(new GridLayout(1,2));
+        bas.add(createCell("",0,nomClient,c));
+        bas.add(createCell("",0, String.valueOf(nbCommandes),c));
+        clientBlock.add(haut);
+        clientBlock.add(bas);
+        clientBlock.setBorder(BorderFactory.createLineBorder(c));
+        commandesInnerPanel.add(clientBlock);
+        commandesInnerPanel.add(createBlankPanel());
+    }
+
+    private JPanel createCell(String Type, int ID, String text, Color c){
         JPanel cell=new JPanel();
         Label CellLabel=new Label(text);
         CellLabel.addMouseListener(new IHM_MouseListener(Type,ID));
         cell.add(CellLabel);
-        cell.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+        cell.setBorder(BorderFactory.createLineBorder(c));//Color.DARK_GRAY
         return cell;
     }
-    private JPanel createDividedCell(String text1, String text2){
+    private JPanel createDividedCell(String text1, String text2, Color c){
         JPanel cell=new JPanel();
         cell.setLayout(new GridLayout(2,1));
         JPanel haut=new JPanel();
         JPanel bas=new JPanel();
         haut.add(new Label(text1));
-        haut.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+        haut.setBorder(BorderFactory.createLineBorder(c));
         bas.add(new Label(text2));
-        bas.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+        bas.setBorder(BorderFactory.createLineBorder(c));
         cell.add(haut);
         cell.add(bas);
-        cell.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+        cell.setBorder(BorderFactory.createLineBorder(c));
         return cell;
     }
 
