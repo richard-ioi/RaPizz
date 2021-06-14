@@ -19,13 +19,13 @@ public class IHM_MouseListener implements MouseListener {
             // puis utiliser IHM.createCommandesJTable pour créer le résultat
             // dans l'IHM
 
-            JdbcConnectDB.getClientById(1);
+            JdbcConnectDB.getClientById(ID);
         }
         if(Type=="PIZZA"){
             //JbdcConnectDB.selectPizza(ID);
         }
         if(Type=="LIVREUR"){
-            JdbcConnectDB.getLivreurById(1);
+            JdbcConnectDB.getLivreurById(ID);
         }
         System.out.println("TYPE="+Type+" ID="+ID);
 

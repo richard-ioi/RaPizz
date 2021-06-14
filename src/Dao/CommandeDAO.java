@@ -6,6 +6,7 @@ import lombok.SneakyThrows;
 import org.apache.log4j.Logger;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -42,6 +43,67 @@ public class CommandeDAO {
         //List<Commande> commande = find("SELECT * FROM Commande");
         //return commande.get(0);
     }
+
+/*    public String[][] getAllCommandes(){
+        String query =
+                "select \n" +
+                "    t2.nom, t3.nom, t4.nom, t5.type, t1.prix, t1.taille, t1.depart_livraison, t1.arrive_livraison\n" +
+                "from\n" +
+                "    Commande as t1\n" +
+                "    left join Pizza as t2 on t1.id_pizza = t2.id_pizza\n" +
+                "    left join Clients as t3 on t1.id_client = t3.id_client\n" +
+                "    left join Livreur as t4 on t1.id_livreur = t4.id_livreur\n" +
+                "    left join Vehicule as t5 on t1.id_vehicule=t5.id_vehicule";
+        try{
+            Statement statement = JdbcConnectDB.getConnection().createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet result = statement.executeQuery(query);
+            ResultSetMetaData metaData = result.getMetaData();
+            int nbColumns = metaData.getColumnCount();
+            int nbRows = countRows(query);
+            //logger.debug("Column nb : "+nbColumns);
+            String[][] commandeList = new String[nbRows][nbColumns];
+            String[] columnNames = new String[nbColumns];
+            for(int i=1; i< nbColumns; i++){
+                columnNames[i] = metaData.getColumnName(i);
+            }
+            int rowCount =0;
+            while(result.next() && rowCount!=nbRows){
+                for(int i=1; i<=nbColumns; i++) {
+                    if (result.getObject(i).equals(null)) {
+                        logger.debug("is null");
+                        commandeList[rowCount][i-1] = "null";
+                    } else {
+                        commandeList[rowCount][i-1] = result.getObject(i).toString();
+                    }
+
+                }
+                rowCount++;
+            }
+            return commandeList;
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+        return new String[1][1];
+    }*/
+    @SneakyThrows
+    public List<Commande> getAllCommande(){
+        List<Commande> commande = find("SELECT * FROM Commande");
+        return commande;
+    }
+/*    private int countRows(String query) {
+        try{
+            Statement statement = JdbcConnectDB.getConnection().createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet result = statement.executeQuery(query);
+            result.last();
+            int nbRows = result.getRow();
+            result.first();
+            return nbRows;
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+        return 0;
+    }*/
+
 
 
     public List<Commande> find(String query) throws SQLException {

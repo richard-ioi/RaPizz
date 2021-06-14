@@ -2,6 +2,7 @@ package DataAccess;
 
 import Dao.*;
 import Domain.Clients;
+import Domain.Commande;
 import Domain.Livreur;
 import Graphics.IHM;
 import org.apache.log4j.BasicConfigurator;
@@ -13,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.*;
+import java.util.List;
 
 
 public class JdbcConnectDB {
@@ -56,9 +58,21 @@ public class JdbcConnectDB {
      */
     private static VehiculeDAO vehiculeDAO = new VehiculeDAO();
 
+    /**
+     * Log4J logger
+     */
     private static Logger logger = Logger.getLogger(JdbcConnectDB.class);
+
+    /**
+     * Constructor
+     */
     public JdbcConnectDB(){}
 
+    /**
+     * Gets database connection
+     * @return
+     * @throws SQLException
+     */
     public static Connection getConnection() throws SQLException {
         if(connection == null){
             connection = makeConnection();
@@ -67,6 +81,11 @@ public class JdbcConnectDB {
         return connection;
     }
 
+    /**
+     * Makes connection with database
+     * @return
+     * @throws SQLException
+     */
     private static Connection makeConnection() throws SQLException {
         try {
             Class c = Class.forName(driver);
@@ -81,13 +100,15 @@ public class JdbcConnectDB {
         return connection;
     }
 
+    /**
+     * Closes an open statement
+     * @param statement
+     * @throws SQLException
+     */
     public static void closeStatement(Statement statement) throws SQLException {
         statement.close();
     }
 
-    public static void printTest(){
-        System.out.println("TEST");
-    }
 
     /**
      * Counts rows in a query response
@@ -195,6 +216,24 @@ public class JdbcConnectDB {
         ihm.createCommandesJTable(livreurString, new String[]{"id_livreur", "nom", "prenom", "retards"});
     }
 
+    public static void getAllCommandes(){
+        int nbRow = countRows("SELECT * FROM Commande");
+        List<Commande> commandeList = commandeDAO.getAllCommande();
+        for(int i=0; i<nbRow; i++){
+            ihm.createCommandesInnerPanel(
+                    commandeList.get(i).getIdCommande(),
+                    commandeList.get(i).getIdClient(),
+                    clientsDAO.findClientsById(commandeList.get(i).getIdClient()).getNom(),
+                    commandeList.get(i).getIdPizza(),
+                    pizzaDAO.findPizzaById(commandeList.get(i).getIdPizza()).getNom(),
+                    commandeList.get(i).getIdLivreur(),
+                    livreurDAO.findLivreurById(commandeList.get(i).getIdLivreur()).getNom(),
+                    commandeList.get(i).getDepartLivraison().toString(),
+                    commandeList.get(i).getArriveLivraison().toString()
+                    );
+        }
+        ihm.reBuildIHM();
+    }
     /**
      * Application main method, sets all the data and calls start up methods.
      * @param arg
@@ -205,6 +244,7 @@ public class JdbcConnectDB {
         BasicConfigurator.configure();
         commandeDAO.updateCommandePrice();
         getBestClientWorseLivreur();
+        getAllCommandes();
         /*for(int i=0; i<8; i++){
             for(int j=0; j<8; j++){
                 logger.debug(execQueryDonneesBrutes("SELECT * FROM Clients")[i][j]);
