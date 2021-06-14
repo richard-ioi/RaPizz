@@ -14,12 +14,17 @@ public class IHM extends JFrame implements ActionListener {
     JButton boutonOngletMenu;
     JButton boutonOngletCommandes;
     JButton boutonOngletDonneesBrutes;
+    JButton boutonOngletStats;
+    JButton boutonOngletClients;
     JPanel onglets;
     JPanel hautFenetre;
     ScrollPane menuWindow;
+    JPanel statsWindow;
+    JPanel clientsWindow;
     JPanel commandesWindow;
     JPanel donneesBrutesWindow;
     JPanel menuInnerPanel;
+    JPanel statsInnerPanel;
     JPanel commandesInnerPanel;
     JPanel commandesStatsPanel;
     JTable commandesJTable;
@@ -28,32 +33,24 @@ public class IHM extends JFrame implements ActionListener {
     int LargeurFenetre;
     int HauteurFenetre;
 
+    // Extraction des clients ayant commandé plus que la moyenne
+    // Nombre de commandes par clients
+
+    // Moyenne des commandes
+    // Quels sont les véhicules n'ayant jamais servi
+    // Suivi du chiffre d'affaires
+    // Identification de la pizza la plus / la moins demandée
+    // Ingrédient favori
     public IHM(int largeur, int hauteur) {
         LargeurFenetre=largeur;
         HauteurFenetre=hauteur;
-        onglets = new JPanel();
-        menuInnerPanel=new JPanel();
-        commandesInnerPanel=new JPanel();
-        commandesStatsPanel=new JPanel();
-        onglets.setLayout(new GridLayout(1,3));
-        menuInnerPanel.setLayout(new BoxLayout(menuInnerPanel,BoxLayout.PAGE_AXIS));
-        commandesInnerPanel.setLayout(new BoxLayout(commandesInnerPanel,BoxLayout.PAGE_AXIS));
-        commandesStatsPanel.setLayout(new GridLayout(1,3));
-        boutonOngletMenu = new JButton("Menu");
-        boutonOngletCommandes=new JButton("Commandes");
-        boutonOngletDonneesBrutes=new JButton("Données brutes");
-        onglets.add(boutonOngletMenu);
-        onglets.add(boutonOngletCommandes);
-        onglets.add(boutonOngletDonneesBrutes);
-        commandesJTable=new JTable();
-        donneesBrutesJTable=new JTable();
-        boutonOngletMenu.addActionListener(this);
-        boutonOngletCommandes.addActionListener(this);
-        boutonOngletCommandes.addMouseListener(new IHM_MouseListener("CLIENT",10));
-        boutonOngletDonneesBrutes.addActionListener(this);
+        initInnerPanels();
         createMenuWindow();
         createCommandesWindow();
+        createStatsWindow();
+        createClientsWindow();
         createDonneesBrutesWindow();
+        createOngletButtons();
         setLayout(new BorderLayout());
         createHautFenetre("Menu");
         add(hautFenetre, BorderLayout.NORTH);
@@ -61,6 +58,46 @@ public class IHM extends JFrame implements ActionListener {
         currentWindow="menuWindow";
         setSize(LargeurFenetre,HauteurFenetre);
         setResizable(false);
+    }
+
+    public void initInnerPanels(){
+        menuInnerPanel=new JPanel();
+        commandesInnerPanel=new JPanel();
+        commandesStatsPanel=new JPanel();
+        statsInnerPanel=new JPanel();
+        menuInnerPanel.setLayout(new BoxLayout(menuInnerPanel,BoxLayout.PAGE_AXIS));
+        commandesInnerPanel.setLayout(new BoxLayout(commandesInnerPanel,BoxLayout.PAGE_AXIS));
+        commandesStatsPanel.setLayout(new GridLayout(1,3));
+        commandesJTable=new JTable();
+        donneesBrutesJTable=new JTable();
+    }
+    public void createOngletButtons(){
+        onglets = new JPanel();
+        onglets.setLayout(new GridLayout(1,5));
+        boutonOngletMenu = new JButton("Menu");
+        boutonOngletCommandes=new JButton("Commandes");
+        boutonOngletStats=new JButton("Statistiques globales");
+        boutonOngletClients=new JButton("Clients");
+        boutonOngletDonneesBrutes=new JButton("Données brutes");
+        boutonOngletMenu.addActionListener(this);
+        boutonOngletCommandes.addActionListener(this);
+        boutonOngletStats.addActionListener(this);
+        boutonOngletClients.addActionListener(this);
+        boutonOngletDonneesBrutes.addActionListener(this);
+        onglets.add(boutonOngletMenu);
+        onglets.add(boutonOngletCommandes);
+        onglets.add(boutonOngletStats);
+        onglets.add(boutonOngletClients);
+        onglets.add(boutonOngletDonneesBrutes);
+    }
+
+    public void createStatsWindow(){
+        statsWindow=new JPanel();
+        statsWindow.add(statsInnerPanel);
+    }
+
+    public void createClientsWindow(){
+        clientsWindow=new JPanel();
     }
 
     public void createMenuWindow(){
@@ -163,31 +200,38 @@ public class IHM extends JFrame implements ActionListener {
         reBuildIHM();
     }
 
-    public void reBuildIHM(){
-        getContentPane().removeAll();
+    // Moyenne des commandes
+    // Quels sont les véhicules n'ayant jamais servi
+    // Suivi du chiffre d'affaires
+    // Identification de la pizza la plus / la moins demandée
+    // Ingrédient favori
+    public void createStatsInnerPanel(int moyenneCommandes, String vehiculesJamaisServi, int chiffreDaffaire, String pizzaPlusDemandee, String pizzaMoinsDemandee, String ingredientFavori){
+        statsInnerPanel=new JPanel();
+        statsInnerPanel.setLayout(new GridLayout(3,3));
+        JLabel moyenneCommandesLabel=new JLabel("Moyenne des commandes : "+String.valueOf(moyenneCommandes));
+        JLabel vehNonServisLabel=new JLabel("Véhicules jamais servis : "+ vehiculesJamaisServi);
+        JLabel chiffreDaffaireLabel=new JLabel("Chiffre d'affaires : "+ String.valueOf(chiffreDaffaire));
+        JLabel pizzaPlusDemandeeLabel=new JLabel("Pizza la plus demandée : "+ pizzaPlusDemandee);
+        JLabel pizzaMoinsDemandeeLabel=new JLabel("Pizza la moins demandée : "+pizzaMoinsDemandee);
+        JLabel ingredientFavoriLabel=new JLabel("Ingrédient favori : "+ingredientFavori);
+        Font f=moyenneCommandesLabel.getFont();
+        moyenneCommandesLabel.setFont(f.deriveFont(f.getStyle() ^ Font.BOLD));
+        vehNonServisLabel.setFont(f.deriveFont(f.getStyle() ^ Font.BOLD));
+        chiffreDaffaireLabel.setFont(f.deriveFont(f.getStyle() ^ Font.BOLD));
+        pizzaPlusDemandeeLabel.setFont(f.deriveFont(f.getStyle() ^ Font.BOLD));
+        pizzaMoinsDemandeeLabel.setFont(f.deriveFont(f.getStyle() ^ Font.BOLD));
+        ingredientFavoriLabel.setFont(f.deriveFont(f.getStyle() ^ Font.BOLD));
+        statsInnerPanel.add(moyenneCommandesLabel);
+        statsInnerPanel.add(createBlankPanel());
+        statsInnerPanel.add(chiffreDaffaireLabel);
+        statsInnerPanel.add(vehNonServisLabel);
+        statsInnerPanel.add(createBlankPanel());
+        statsInnerPanel.add(pizzaPlusDemandeeLabel);
+        statsInnerPanel.add(pizzaMoinsDemandeeLabel);
+        statsInnerPanel.add(createBlankPanel());
+        statsInnerPanel.add(ingredientFavoriLabel);
 
-        createMenuWindow();
-        createCommandesWindow();
-        createDonneesBrutesWindow();
-
-        if (currentWindow == "menuWindow"){
-            createHautFenetre("Menu");
-            getContentPane().add(hautFenetre, BorderLayout.NORTH);
-            getContentPane().add(menuWindow);
-        }
-        if (currentWindow == "commandesWindow"){
-            createHautFenetre("Commandes");
-            getContentPane().add(hautFenetre, BorderLayout.NORTH);
-            getContentPane().add(commandesWindow);
-        }
-        if (currentWindow == "donneesBrutesWindow"){
-            createHautFenetre("Données Brutes");
-            getContentPane().add(hautFenetre, BorderLayout.NORTH);
-            getContentPane().add(donneesBrutesWindow);
-        }
-
-        repaint();
-        printAll(getGraphics());
+        reBuildIHM();
     }
 
     private JPanel createCell(String Type, int ID, String text){
@@ -228,6 +272,46 @@ public class IHM extends JFrame implements ActionListener {
         hautFenetre.add(onglets);
         hautFenetre.add(titreFenetre);
     }
+
+    public void reBuildIHM(){
+        getContentPane().removeAll();
+
+        createMenuWindow();
+        createCommandesWindow();
+        createDonneesBrutesWindow();
+        createStatsWindow();
+        createClientsWindow();
+
+        if (currentWindow == "menuWindow"){
+            createHautFenetre("Menu");
+            getContentPane().add(hautFenetre, BorderLayout.NORTH);
+            getContentPane().add(menuWindow);
+        }
+        if (currentWindow == "commandesWindow"){
+            createHautFenetre("Commandes");
+            getContentPane().add(hautFenetre, BorderLayout.NORTH);
+            getContentPane().add(commandesWindow);
+        }
+        if (currentWindow == "donneesBrutesWindow"){
+            createHautFenetre("Données Brutes");
+            getContentPane().add(hautFenetre, BorderLayout.NORTH);
+            getContentPane().add(donneesBrutesWindow);
+        }
+        if (currentWindow == "clientsWindow"){
+            createHautFenetre("Clients");
+            getContentPane().add(hautFenetre, BorderLayout.NORTH);
+            getContentPane().add(clientsWindow);
+        }
+        if (currentWindow == "statsWindow"){
+            createHautFenetre("Statistiques globales");
+            getContentPane().add(hautFenetre, BorderLayout.NORTH);
+            getContentPane().add(statsWindow);
+        }
+
+        repaint();
+        printAll(getGraphics());
+    }
+
     @Override
     public void actionPerformed(ActionEvent evt) {
         Object source = evt.getSource();
@@ -250,6 +334,18 @@ public class IHM extends JFrame implements ActionListener {
             getContentPane().add(hautFenetre, BorderLayout.NORTH);
             getContentPane().add(donneesBrutesWindow);
             currentWindow="donneesBrutesWindow";
+        }
+        if (source == boutonOngletClients){
+            createHautFenetre("Clients");
+            getContentPane().add(hautFenetre, BorderLayout.NORTH);
+            getContentPane().add(clientsWindow);
+            currentWindow="clientsWindow";
+        }
+        if (source == boutonOngletStats){
+            createHautFenetre("Statistiques globales");
+            getContentPane().add(hautFenetre, BorderLayout.NORTH);
+            getContentPane().add(statsWindow);
+            currentWindow="statsWindow";
         }
         repaint();
         printAll(getGraphics());
