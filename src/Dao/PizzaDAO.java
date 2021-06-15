@@ -25,7 +25,7 @@ public class PizzaDAO {
         if(cache.containsKey(id)){
             return cache.get(id);
         }
-        List<Pizza> pizza = find("WHERE id_pizza = "+id);
+        List<Pizza> pizza = find("SELECT * FROM Pizza WHERE id_pizza = "+id);
         return pizza.get(0);
     }
 
@@ -51,12 +51,21 @@ public class PizzaDAO {
         }
         return 0;
     }
+    public HashMap<String, Double> getPizzaPrice(int idPizza){
+        List<Pizza> price = find("SELECT prix FROM PIZZA WHERE id_pizza="+idPizza);
+        double prix = (double)price.get(0).getPrix();
+        HashMap<String, Double> prixTaille = new HashMap();
+        prixTaille.put("naine", prix-prix*0.33);
+        prixTaille.put("humaine", prix);
+        prixTaille.put("ogresse", prix+prix*0.33);
+        return prixTaille;
+    }
     @SneakyThrows
     public List<Pizza> find(String query) /*throws SQLException*/ {
         List<Pizza> pizzaList = new ArrayList<>();
         Statement statement = JdbcConnectDB.getConnection().createStatement();
 
-        String sqlQuery = "SELECT * FROM Pizza "+ query;
+        String sqlQuery = query;
         try {
             logger.debug("executing query : "+ sqlQuery);
             ResultSet resultSet = statement.executeQuery(sqlQuery);

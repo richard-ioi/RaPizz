@@ -44,6 +44,12 @@ public class ClientsDAO {
             return clients.get(0);
         }
 
+    /**
+     * General method used for select requests in Clients table
+     * @param query
+     * @return
+     * @throws SQLException
+     */
         @SneakyThrows
         public List<Clients> find(String query)throws SQLException {
             List<Clients> clientsList = new ArrayList<>();
@@ -68,6 +74,12 @@ public class ClientsDAO {
             return clientsList;
         }
 
+    /**
+     * Converts Result set into Clients object
+     * @param resultSet
+     * @return
+     * @throws SQLException
+     */
         private Clients resultSetToClients(ResultSet resultSet) throws SQLException{
             Clients clients = null;
 
