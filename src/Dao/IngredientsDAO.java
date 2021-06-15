@@ -22,11 +22,12 @@ public class IngredientsDAO {
      * @param id
      * @return
      */
+
     public Ingredients findIngredientsById(int id){
         if(cache.containsKey(id)){
             return cache.get(id);
         }
-        List<Ingredients> ingredients = find("WHERE id_ingredients = "+id);
+        List<Ingredients> ingredients = find("WHERE id_ingredient = "+id);
         return ingredients.get(0);
     }
 
@@ -56,7 +57,7 @@ public class IngredientsDAO {
     private Ingredients resultSetToIngredients(ResultSet resultSet) throws SQLException{
         Ingredients ingredients = null;
 
-        Integer id = resultSet.getInt("id_ingredients");
+        Integer id = resultSet.getInt("id_ingredient");
         if(cache.containsKey(id)) ingredients =cache.get(id);
         else ingredients = new Ingredients();
 

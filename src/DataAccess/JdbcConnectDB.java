@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -59,6 +60,11 @@ public class JdbcConnectDB {
     private static VehiculeDAO vehiculeDAO = new VehiculeDAO();
 
     /**
+     * Menu DAO.
+     */
+    private static MenuDAO menuDAO = new MenuDAO();
+
+    /**
      * Log4J logger
      */
     private static Logger logger = Logger.getLogger(JdbcConnectDB.class);
@@ -69,7 +75,7 @@ public class JdbcConnectDB {
     public JdbcConnectDB(){}
 
     /**
-     * Gets database connection
+     * Gets database connection.
      * @return
      * @throws SQLException
      */
@@ -82,7 +88,7 @@ public class JdbcConnectDB {
     }
 
     /**
-     * Makes connection with database
+     * Makes connection with database.
      * @return
      * @throws SQLException
      */
@@ -101,7 +107,7 @@ public class JdbcConnectDB {
     }
 
     /**
-     * Closes an open statement
+     * Closes an open statement.
      * @param statement
      * @throws SQLException
      */
@@ -111,7 +117,7 @@ public class JdbcConnectDB {
 
 
     /**
-     * Counts rows in a query response
+     * Counts rows in a query response.
      * @param query
      * @return
      */
@@ -131,7 +137,7 @@ public class JdbcConnectDB {
     }
 
     /**
-     * Execute random query in GUI
+     * Execute random query in GUI.
      * @param query
      */
     public static void execQueryDonneesBrutes(String query){
@@ -216,6 +222,9 @@ public class JdbcConnectDB {
         ihm.createCommandesJTable(livreurString, new String[]{"id_livreur", "nom", "prenom", "retards"});
     }
 
+    /**
+     * Gets All orders for display
+     */
     public static void getAllCommandes(){
         int nbRow = countRows("SELECT * FROM Commande");
         List<Commande> commandeList = commandeDAO.getAllCommande();
@@ -234,6 +243,17 @@ public class JdbcConnectDB {
         }
         ihm.reBuildIHM();
     }
+
+    /**
+     * Gets all pizzas for menu GUI
+     */
+    public static void getAllPizza(){
+        for(int i=1; i<= pizzaDAO.pizzaCount(); i++){
+            ihm.createMenuInnerPanel(pizzaDAO.findPizzaById(i).getNom(),
+                    menuDAO.convertIngredientIdToName().get(i-1).toString(), 1, 1, 1);
+        }
+        ihm.reBuildIHM();
+    }
     /**
      * Application main method, sets all the data and calls start up methods.
      * @param arg
@@ -245,12 +265,9 @@ public class JdbcConnectDB {
         commandeDAO.updateCommandePrice();
         getBestClientWorseLivreur();
         getAllCommandes();
-        /*for(int i=0; i<8; i++){
-            for(int j=0; j<8; j++){
-                logger.debug(execQueryDonneesBrutes("SELECT * FROM Clients")[i][j]);
-            }
+        getAllPizza();
+        //logger.debug(menuDAO.convertIngredientIdToName());
 
-        }*/
         // faire fonction qui itere n fois la fonction de richard pour
         ihm.addWindowListener(new WindowAdapter() {
 

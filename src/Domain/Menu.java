@@ -20,6 +20,6 @@ public class Menu {
 
     Pizza pizza;
 
-    Set<Ingredients> ingredientsSet;
+    Set<String> ingredientsSet;
 
 }

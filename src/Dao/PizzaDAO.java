@@ -38,6 +38,19 @@ public class PizzaDAO {
         return pizzaList.get(0);
 
     }
+    public int pizzaCount(){
+        try{
+            Statement statement = JdbcConnectDB.getConnection().createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet result = statement.executeQuery("SELECT * FROM Pizza");
+            result.last();
+            int nbRows = result.getRow();
+            result.first();
+            return nbRows;
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+        return 0;
+    }
     @SneakyThrows
     public List<Pizza> find(String query) /*throws SQLException*/ {
         List<Pizza> pizzaList = new ArrayList<>();
