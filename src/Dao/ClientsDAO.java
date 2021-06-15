@@ -32,7 +32,40 @@ public class ClientsDAO {
             List<Clients> clients = find("SELECT * FROM Clients WHERE id_client= "+id);
             return clients.get(0);
         }
+        @SneakyThrows
+        public int moyenneNbPizzaCommande(){
+            List<Clients> clientsList = new ArrayList<>();
+            Statement statement = JdbcConnectDB.getConnection().createStatement();
+            System.out.print(statement.toString());
+            String sqlQuery ="SELECT AVG(pizza_achete) FROM Clients";
+            int moyenne=0;
+            try {
+                logger.debug("executing query : "+ sqlQuery);
+                ResultSet resultSet = statement.executeQuery(sqlQuery);
+                while( resultSet.next()){
+                    //Clients clients = resultSetToClients(resultSet);
+                    //clientsList.add(clients);
+                    moyenne = resultSet.getInt("AVG(pizza_achete)");
+                }
+            } catch (SQLException sqlException){
+                logger.error("error executing: "+sqlQuery, sqlException);
+            } finally {
+                if(statement != null) try {
+                    statement.close();
+                }catch (SQLException e){}
 
+            }
+            logger.debug("Moyenne = "+moyenne);
+            return moyenne;
+        }
+
+        @SneakyThrows
+        public boolean hasOrderedMoreThanAvg(int idClient){
+            if(findClientsById(idClient).getPizzaAchete() > moyenneNbPizzaCommande()){
+                return true;
+            }
+            return false;
+        }
         /**
          * Finds customer that has spent the most.
          * @return the customer

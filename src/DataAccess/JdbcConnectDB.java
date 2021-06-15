@@ -20,7 +20,7 @@ import java.util.List;
 
 public class JdbcConnectDB {
 
-    private static IHM ihm=new IHM(800,800);
+    private static IHM ihm=new IHM(1400,800);
 
     private static String url = "jdbc:mysql://localhost:3306/RAPIZZ";
     private static String uname = "Admin";
@@ -151,8 +151,8 @@ public class JdbcConnectDB {
             //logger.debug("Column nb : "+nbColumns);
             String[][] resultatRequete = new String[nbRows][nbColumns];
             String[] columnNames = new String[nbColumns];
-            for(int i=1; i< nbColumns; i++){
-                columnNames[i] = metaData.getColumnName(i);
+            for(int i=1; i<= nbColumns; i++){
+                columnNames[i-1] = metaData.getColumnName(i);
             }
             int rowCount =0;
             while(result.next() && rowCount!=nbRows){
@@ -207,6 +207,16 @@ public class JdbcConnectDB {
          "solde", "pizza_achete","depenses"});
     }
 
+    public static void getAllClients(){
+        for(int i=1; i<=countRows("SELECT * FROM Clients"); i++){
+            ihm.createClientInnerPanel(clientsDAO.findClientsById(i).getIdClient(),
+                    clientsDAO.findClientsById(i).getNom() + " " + clientsDAO.findClientsById(i).getPrenom(),
+                    clientsDAO.findClientsById(i).getPizzaAchete(),
+                    clientsDAO.hasOrderedMoreThanAvg(i));
+        }
+        ihm.reBuildIHM();
+    }
+
     /**
      *   Converts Livreur object data in 2D String Array to be passed to GUI.
      * @param id
@@ -238,7 +248,8 @@ public class JdbcConnectDB {
                     commandeList.get(i).getIdLivreur(),
                     livreurDAO.findLivreurById(commandeList.get(i).getIdLivreur()).getNom(),
                     commandeList.get(i).getDepartLivraison().toString(),
-                    commandeList.get(i).getArriveLivraison().toString()
+                    commandeList.get(i).getArriveLivraison().toString(),
+                    ""+commandeList.get(i).getPrix()
                     );
         }
         ihm.reBuildIHM();
@@ -250,8 +261,20 @@ public class JdbcConnectDB {
     public static void getAllPizza(){
         for(int i=1; i<= pizzaDAO.pizzaCount(); i++){
             ihm.createMenuInnerPanel(pizzaDAO.findPizzaById(i).getNom(),
-                    menuDAO.convertIngredientIdToName().get(i-1).toString(), 1, 1, 1);
+                    menuDAO.convertIngredientIdToName().get(i-1).toString(),
+                    pizzaDAO.getPizzaPrice(i).get("naine"),
+                    pizzaDAO.getPizzaPrice(i).get("humaine"),
+                    pizzaDAO.getPizzaPrice(i).get("ogresse"));
         }
+        ihm.reBuildIHM();
+    }
+    public static void getAllStats(){
+        ihm.createStatsInnerPanel(clientsDAO.moyenneNbPizzaCommande(),
+                "TODO",
+                1,
+                "TODO",
+                "TODO",
+                "TODO");
         ihm.reBuildIHM();
     }
     /**
@@ -266,6 +289,8 @@ public class JdbcConnectDB {
         getBestClientWorseLivreur();
         getAllCommandes();
         getAllPizza();
+        getAllClients();
+        getAllStats();
         //logger.debug(menuDAO.convertIngredientIdToName());
 
         // faire fonction qui itere n fois la fonction de richard pour

@@ -101,7 +101,9 @@ public class IHM extends JFrame implements ActionListener {
 
     public void createMenuWindow(){
         menuWindow=new ScrollPane();
+        menuWindow.setPreferredSize(new Dimension(LargeurFenetre-10,(HauteurFenetre/3)*2));
         menuWindow.add(menuInnerPanel);
+        //menuWindow.setPreferredSize(new Dimension(LargeurFenetre-10,(HauteurFenetre/3)*2));
     }
 
     public void createCommandesWindow(){
@@ -112,7 +114,7 @@ public class IHM extends JFrame implements ActionListener {
         commandesList.add(commandesInnerPanel);
         commandesList.setPreferredSize(new Dimension(LargeurFenetre-10,(HauteurFenetre/3)*2));
         commandesWindow.add(commandesList);
-        commandesWindow.add(commandesJTable);
+        commandesWindow.add(new JScrollPane(commandesJTable));
     }
 
     public void createDonneesBrutesWindow(){
@@ -125,12 +127,15 @@ public class IHM extends JFrame implements ActionListener {
         JButton execQuerryBrutes=new JButton("Exécuter la requête SQL");
         execQuerryBrutes.addActionListener(new IHM_ActionListener(this));
         haut.add(execQuerryBrutes);
-        bas.add(donneesBrutesJTable);
+        JPanel tablePanel=new JPanel();
+        tablePanel.add(donneesBrutesJTable, BorderLayout.CENTER);
+        tablePanel.add(donneesBrutesJTable.getTableHeader(), BorderLayout.NORTH);
+        bas.add(new JScrollPane(donneesBrutesJTable));
         donneesBrutesWindow.add(haut,BorderLayout.NORTH);
         donneesBrutesWindow.add(bas);
     }
 
-    public void createMenuInnerPanel(String nomPizza, String Liste_Ingredients, int prix_naine, int prix_normal, int prix_ogresse){
+    public void createMenuInnerPanel(String nomPizza, String Liste_Ingredients, double prix_naine, double prix_normal, double prix_ogresse){
         JPanel pizzaBlock = new JPanel();
         pizzaBlock.setLayout(new GridLayout(2,1));
         JPanel haut=new JPanel();
@@ -145,20 +150,19 @@ public class IHM extends JFrame implements ActionListener {
         haut.setBackground(Color.DARK_GRAY);
         ingredients.add(new Label(Liste_Ingredients));
         prix.setLayout(new GridLayout(1,3));
-        prix.add(createDividedCell("Naine",prix_naine+"€",Color.DARK_GRAY));
-        prix.add(createDividedCell("Normale",prix_normal+"€",Color.DARK_GRAY));
-        prix.add(createDividedCell("Ogresse",prix_ogresse+"€",Color.DARK_GRAY));
+        prix.add(createDividedCell("Naine",prix_naine+" €",Color.DARK_GRAY));
+        prix.add(createDividedCell("Normale",prix_normal+" €",Color.DARK_GRAY));
+        prix.add(createDividedCell("Ogresse",prix_ogresse+" €",Color.DARK_GRAY));
         bas.add(ingredients);
         bas.add(prix);
         pizzaBlock.add(haut);
         pizzaBlock.add(bas);
         pizzaBlock.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
-        pizzaBlock.setPreferredSize(new Dimension(LargeurFenetre-10,(HauteurFenetre/3)*2));
         menuInnerPanel.add(pizzaBlock);
         menuInnerPanel.add(createBlankPanel());
     }
 
-    public void createCommandesInnerPanel(int IDCommande, int IDClient, String NomClient, int IDPizza, String NomPizza, int IDLivreur, String NomLivreur, String DepartLivraison, String ArriveeLivraison){
+    public void createCommandesInnerPanel(int IDCommande, int IDClient, String NomClient, int IDPizza, String NomPizza, int IDLivreur, String NomLivreur, String DepartLivraison, String ArriveeLivraison, String PrixCommande){
         JPanel commandeBlock = new JPanel();
         commandeBlock.setLayout(new GridLayout(2,1));
         JPanel haut=new JPanel();
@@ -174,6 +178,7 @@ public class IHM extends JFrame implements ActionListener {
         bas.add(createCell("LIVREUR",IDLivreur,NomLivreur,Color.DARK_GRAY));
         bas.add(createCell("",0,DepartLivraison,Color.DARK_GRAY));
         bas.add(createCell("",0,ArriveeLivraison,Color.DARK_GRAY));
+        bas.add(createCell("",0,PrixCommande+" €",Color.RED));
         commandeBlock.add(haut);
         commandeBlock.add(bas);
         commandeBlock.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));

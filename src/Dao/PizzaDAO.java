@@ -52,12 +52,11 @@ public class PizzaDAO {
         return 0;
     }
     public HashMap<String, Double> getPizzaPrice(int idPizza){
-        List<Pizza> price = find("SELECT prix FROM PIZZA WHERE id_pizza="+idPizza);
-        double prix = (double)price.get(0).getPrix();
+        double prix = (double)findPizzaById(idPizza).getPrix();
         HashMap<String, Double> prixTaille = new HashMap();
-        prixTaille.put("naine", prix-prix*0.33);
+        prixTaille.put("naine", (double)Math.round((prix-prix*0.33)*100)/100);
         prixTaille.put("humaine", prix);
-        prixTaille.put("ogresse", prix+prix*0.33);
+        prixTaille.put("ogresse", (double)Math.round((prix+prix*0.33)*100)/100);
         return prixTaille;
     }
     @SneakyThrows
