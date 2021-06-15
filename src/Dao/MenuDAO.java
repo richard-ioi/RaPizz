@@ -84,10 +84,15 @@ public class MenuDAO {
         if(cache.containsKey(idIngredient)) menu =cache.get(idIngredient);
         else menu = new Menu();
 
+<<<<<<< HEAD
         menu.setIdIngredient(idIngredient);
         menu.setIdPizza(resultSet.getInt("id_pizza"));
 
         if(! cache.containsKey(idIngredient)) cache.put(idIngredient, menu);
+=======
+        //menu.setIdIngredient();
+        if(! cache.containsKey(id)) cache.put(id, menu);
+>>>>>>> a3c4ef506ca387343368eadca676ef604c457465
 
         logger.info("get commande for order "+menu);
         return menu;
