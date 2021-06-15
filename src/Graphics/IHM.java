@@ -153,6 +153,7 @@ public class IHM extends JFrame implements ActionListener {
         pizzaBlock.add(haut);
         pizzaBlock.add(bas);
         pizzaBlock.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+        pizzaBlock.setPreferredSize(new Dimension(LargeurFenetre-10,(HauteurFenetre/3)*2));
         menuInnerPanel.add(pizzaBlock);
         menuInnerPanel.add(createBlankPanel());
     }
