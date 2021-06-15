@@ -257,8 +257,8 @@ public class IHM extends JFrame implements ActionListener {
         clientBlock.add(haut);
         clientBlock.add(bas);
         clientBlock.setBorder(BorderFactory.createLineBorder(c));
-        commandesInnerPanel.add(clientBlock);
-        commandesInnerPanel.add(createBlankPanel());
+        clientsInnerPanel.add(clientBlock);
+        clientsInnerPanel.add(createBlankPanel());
     }
 
     private JPanel createCell(String Type, int ID, String text, Color c){
