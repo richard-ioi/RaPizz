@@ -82,6 +82,41 @@ public class PizzaDAO {
         }
         return pizzaList;
     }
+
+    @SneakyThrows
+    public int popularId(String order){
+        int pizza = 1;
+        Statement statement = JdbcConnectDB.getConnection().createStatement();
+
+        String sqlQuery = "SELECT COUNT(id_pizza) AS c FROM Commande GROUP BY id_pizza ORDER BY c "+ order+" LIMIT 1";
+        try {
+            logger.debug("executing query : "+ sqlQuery);
+            ResultSet resultSet = statement.executeQuery(sqlQuery);
+            while( resultSet.next()){
+                pizza = resultSet.getInt("c");
+            }
+        } catch (SQLException sqlException){
+            logger.error("error executing: "+sqlQuery, sqlException);
+        } finally {
+            if(statement != null) try {
+                statement.close();
+            }catch (SQLException e){}
+
+        }
+        return pizza;
+    }
+    @SneakyThrows
+    public Pizza mostPopularPizza(){
+        return findPizzaById(popularId("DESC"));
+    }
+
+    public String leastPopularPizza(){
+        if(findPizzaById(popularId("ASC")) != mostPopularPizza()){
+            return findPizzaById(popularId("ASC")).getNom();
+        }
+        return null;
+    }
+
     private Pizza resultSetToPizza(ResultSet resultSet) throws SQLException{
         Pizza pizza = null;
 

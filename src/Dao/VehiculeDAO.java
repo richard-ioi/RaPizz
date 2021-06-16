@@ -30,6 +30,46 @@ public class VehiculeDAO {
     }
 
     @SneakyThrows
+    public List<Integer> getVehiculeFromTable(String table){
+        Statement statement = JdbcConnectDB.getConnection().createStatement();
+        List<Integer> vehiculeList = new ArrayList<>();
+        String sqlQuery = "SELECT id_vehicule FROM "+table ;
+        try {
+            logger.debug("executing query : "+ sqlQuery);
+            ResultSet resultSet = statement.executeQuery(sqlQuery);
+            while( resultSet.next()){
+                vehiculeList.add(resultSet.getInt("id_vehicule"));
+            }
+        } catch (SQLException sqlException){
+            logger.error("error executing: "+sqlQuery, sqlException);
+        } finally {
+            if(statement != null) try {
+                statement.close();
+            }catch (SQLException e){}
+
+        }
+        return vehiculeList;
+    }
+
+    public String getVehiculeNoUse(){
+        List<Integer> commandeVehicule = getVehiculeFromTable("Commande");
+        List<Integer> vehiculeVehicule = getVehiculeFromTable("Vehicule");
+        String name ="";
+        for(int i=0; i<Math.max(commandeVehicule.size(), vehiculeVehicule.size())-1; i++){
+            if(commandeVehicule.contains(vehiculeVehicule.get(i))){
+                continue;
+            }
+            else{
+                name = findVehiculeById(vehiculeVehicule.get(i)).getImmatriculation();
+            }
+        }
+        if(name.equals("")) name = "Tous utilisés";
+        return name;
+    }
+
+
+
+    @SneakyThrows
     public List<Vehicule> find(String query) /*throws SQLException*/ {
         List<Vehicule> vehiculeList = new ArrayList<>();
         Statement statement = JdbcConnectDB.getConnection().createStatement();

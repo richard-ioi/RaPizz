@@ -210,7 +210,7 @@ public class IHM extends JFrame implements ActionListener {
     // Suivi du chiffre d'affaires
     // Identification de la pizza la plus / la moins demandée
     // Ingrédient favori
-    public void createStatsInnerPanel(int moyenneCommandes, String vehiculesJamaisServi, int chiffreDaffaire, String pizzaPlusDemandee, String pizzaMoinsDemandee, String ingredientFavori){
+    public void createStatsInnerPanel(int moyenneCommandes, String vehiculesJamaisServi, double chiffreDaffaire, String pizzaPlusDemandee, String pizzaMoinsDemandee, String ingredientFavori){
         statsInnerPanel=new JPanel();
         statsInnerPanel.setLayout(new GridLayout(3,3));
         JLabel moyenneCommandesLabel=new JLabel("Moyenne des commandes : "+String.valueOf(moyenneCommandes));

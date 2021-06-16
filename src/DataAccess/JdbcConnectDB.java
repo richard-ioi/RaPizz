@@ -270,11 +270,11 @@ public class JdbcConnectDB {
     }
     public static void getAllStats(){
         ihm.createStatsInnerPanel(clientsDAO.moyenneNbPizzaCommande(),
-                "TODO",
-                1,
-                "TODO",
-                "TODO",
-                "TODO");
+                vehiculeDAO.getVehiculeNoUse(),
+                commandeDAO.profits(),
+                pizzaDAO.mostPopularPizza().getNom(),
+                pizzaDAO.leastPopularPizza(),
+                ingredientsDAO.mostPpularIngredient().getNom());
         ihm.reBuildIHM();
     }
     /**
@@ -291,7 +291,6 @@ public class JdbcConnectDB {
         getAllPizza();
         getAllClients();
         getAllStats();
-        //logger.debug(menuDAO.convertIngredientIdToName());
 
         // faire fonction qui itere n fois la fonction de richard pour
         ihm.addWindowListener(new WindowAdapter() {

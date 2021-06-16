@@ -2,6 +2,7 @@ package Dao;
 
 import DataAccess.JdbcConnectDB;
 import Domain.Ingredients;
+import Domain.Pizza;
 import lombok.SneakyThrows;
 import org.apache.log4j.Logger;
 
@@ -27,16 +28,44 @@ public class IngredientsDAO {
         if(cache.containsKey(id)){
             return cache.get(id);
         }
-        List<Ingredients> ingredients = find("WHERE id_ingredient = "+id);
+        List<Ingredients> ingredients = find("SELECT * FROM Ingredients WHERE id_ingredient = "+id);
         return ingredients.get(0);
     }
+
+    @SneakyThrows
+    public int mostPopularIngredientId(){
+        int ingredient = 1;
+        Statement statement = JdbcConnectDB.getConnection().createStatement();
+
+        String sqlQuery = "SELECT COUNT(id_ingredient) AS c FROM Pizza_Ingredients GROUP BY id_ingredient ORDER BY c DESC LIMIT 1";
+        try {
+            logger.debug("executing query : "+ sqlQuery);
+            ResultSet resultSet = statement.executeQuery(sqlQuery);
+            while( resultSet.next()){
+                ingredient = resultSet.getInt("c");
+            }
+        } catch (SQLException sqlException){
+            logger.error("error executing: "+sqlQuery, sqlException);
+        } finally {
+            if(statement != null) try {
+                statement.close();
+            }catch (SQLException e){}
+
+        }
+        return ingredient;
+    }
+
+    public Ingredients mostPpularIngredient(){
+        return findIngredientsById(mostPopularIngredientId());
+    }
+
 
     @SneakyThrows
     public List<Ingredients> find(String query) /*throws SQLException*/ {
         List<Ingredients> ingredientsList = new ArrayList<>();
         Statement statement = JdbcConnectDB.getConnection().createStatement();
 
-        String sqlQuery = "SELECT * FROM Ingredients "+ query;
+        String sqlQuery = query;
         try {
             logger.debug("executing query : "+ sqlQuery);
             ResultSet resultSet = statement.executeQuery(sqlQuery);
