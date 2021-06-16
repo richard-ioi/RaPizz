@@ -60,6 +60,7 @@ public class IHM extends JFrame implements ActionListener {
         statsInnerPanel=new JPanel();
         menuInnerPanel.setLayout(new BoxLayout(menuInnerPanel,BoxLayout.PAGE_AXIS));
         commandesInnerPanel.setLayout(new BoxLayout(commandesInnerPanel,BoxLayout.PAGE_AXIS));
+        clientsInnerPanel.setLayout(new BoxLayout(commandesInnerPanel,BoxLayout.PAGE_AXIS));
         commandesStatsPanel.setLayout(new GridLayout(1,3));
         commandesJTable=new JTable();
         donneesBrutesJTable=new JTable();
@@ -92,7 +93,7 @@ public class IHM extends JFrame implements ActionListener {
 
     public void createClientsWindow(){
         clientsWindow=new JPanel();
-        clientsWindow.setLayout(new FlowLayout(FlowLayout.CENTER));
+       // clientsWindow.setLayout(new FlowLayout(FlowLayout.CENTER));
         ScrollPane clientsList=new ScrollPane();
         clientsList.add(clientsInnerPanel);
         clientsList.setPreferredSize(new Dimension(LargeurFenetre-10,(HauteurFenetre)));
