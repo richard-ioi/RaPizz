@@ -8,13 +8,9 @@ import Graphics.IHM;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -65,12 +61,12 @@ public class JdbcConnectDB {
     private static MenuDAO menuDAO = new MenuDAO();
 
     /**
-     * Log4J logger
+     * Log4J logger.
      */
     private static Logger logger = Logger.getLogger(JdbcConnectDB.class);
 
     /**
-     * Constructor
+     * Constructor.
      */
     public JdbcConnectDB(){}
 
@@ -207,6 +203,9 @@ public class JdbcConnectDB {
          "solde", "pizza_achete","depenses"});
     }
 
+    /**
+     * Gets all Clients from the database.
+     */
     public static void getAllClients(){
         for(int i=1; i<=countRows("SELECT * FROM Clients"); i++){
             ihm.createClientInnerPanel(clientsDAO.findClientsById(i).getIdClient(),
@@ -233,7 +232,7 @@ public class JdbcConnectDB {
     }
 
     /**
-     * Gets All orders for display
+     * Gets All orders for display.
      */
     public static void getAllCommandes(){
         int nbRow = countRows("SELECT * FROM Commande");
@@ -256,7 +255,7 @@ public class JdbcConnectDB {
     }
 
     /**
-     * Gets all pizzas for menu GUI
+     * Gets all pizzas for menu GUI.
      */
     public static void getAllPizza(){
         for(int i=1; i<= pizzaDAO.pizzaCount(); i++){
@@ -268,6 +267,12 @@ public class JdbcConnectDB {
         }
         ihm.reBuildIHM();
     }
+
+    /**
+     * Gets the average amount of pizza orders, the least used vehicule, the profit made, the most popular pizza, the
+     * least popular pizza and the most popular ingredient from the data base.
+     *
+     */
     public static void getAllStats(){
         ihm.createStatsInnerPanel(clientsDAO.moyenneNbPizzaCommande(),
                 vehiculeDAO.getVehiculeNoUse(),
