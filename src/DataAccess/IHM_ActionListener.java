@@ -8,9 +8,6 @@ public class IHM_ActionListener implements ActionListener {
         View=view;
     }
     public void actionPerformed(ActionEvent e) {
-        // Créer une fonction execQuerryDonneesBrutes (la requête est entrée en paramètre
-        //sous forme de STRING) puis utiliser IHM.createDonneesBrutesJTable pour
-        // retourner une JTable avec les résultats de la requête
 
         JdbcConnectDB.execQueryDonneesBrutes(View.queryDonneesBrutes.getText());
     }

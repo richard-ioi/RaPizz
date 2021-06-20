@@ -29,6 +29,11 @@ public class VehiculeDAO {
         return vehicule.get(0);
     }
 
+    /**
+     * Gets list of vehicule ids from db.
+     * @param table
+     * @return
+     */
     @SneakyThrows
     public List<Integer> getVehiculeFromTable(String table){
         Statement statement = JdbcConnectDB.getConnection().createStatement();
@@ -51,6 +56,10 @@ public class VehiculeDAO {
         return vehiculeList;
     }
 
+    /**
+     * Gets vehicule name that has never been used.
+     * @return unused Vehicule immatriculation.
+     */
     public String getVehiculeNoUse(){
         List<Integer> commandeVehicule = getVehiculeFromTable("Commande");
         List<Integer> vehiculeVehicule = getVehiculeFromTable("Vehicule");
@@ -68,7 +77,11 @@ public class VehiculeDAO {
     }
 
 
-
+    /**
+     * Gets all Vehicules related to the query param.
+     * @param query
+     * @return
+     */
     @SneakyThrows
     public List<Vehicule> find(String query) /*throws SQLException*/ {
         List<Vehicule> vehiculeList = new ArrayList<>();
@@ -92,6 +105,13 @@ public class VehiculeDAO {
         }
         return vehiculeList;
     }
+
+    /**
+     * Converts ResultSet data to Vehicule object.
+     * @param resultSet
+     * @return
+     * @throws SQLException
+     */
     private Vehicule resultSetToVehicule(ResultSet resultSet) throws SQLException{
         Vehicule vehicule = null;
 

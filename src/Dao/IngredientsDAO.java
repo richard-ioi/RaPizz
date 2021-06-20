@@ -2,7 +2,6 @@ package Dao;
 
 import DataAccess.JdbcConnectDB;
 import Domain.Ingredients;
-import Domain.Pizza;
 import lombok.SneakyThrows;
 import org.apache.log4j.Logger;
 
@@ -23,7 +22,6 @@ public class IngredientsDAO {
      * @param id
      * @return
      */
-
     public Ingredients findIngredientsById(int id){
         if(cache.containsKey(id)){
             return cache.get(id);
@@ -32,6 +30,10 @@ public class IngredientsDAO {
         return ingredients.get(0);
     }
 
+    /**
+     * Finds id of the most popular Ingredient from db.
+     * @return
+     */
     @SneakyThrows
     public int mostPopularIngredientId(){
         int ingredient = 1;
@@ -55,11 +57,19 @@ public class IngredientsDAO {
         return ingredient;
     }
 
+    /**
+     * Returns most popular ingredient.
+     * @return
+     */
     public Ingredients mostPpularIngredient(){
         return findIngredientsById(mostPopularIngredientId());
     }
 
-
+    /**
+     * Finds Ingredients related to query param
+     * @param query
+     * @return
+     */
     @SneakyThrows
     public List<Ingredients> find(String query) /*throws SQLException*/ {
         List<Ingredients> ingredientsList = new ArrayList<>();
@@ -83,6 +93,13 @@ public class IngredientsDAO {
         }
         return ingredientsList;
     }
+
+    /**
+     * Converts ResultSet to Ingredients object.
+     * @param resultSet
+     * @return
+     * @throws SQLException
+     */
     private Ingredients resultSetToIngredients(ResultSet resultSet) throws SQLException{
         Ingredients ingredients = null;
 

@@ -14,12 +14,24 @@ import java.util.Set;
 @NoArgsConstructor
 public class Menu {
 
+    /**
+     * Pizza id.
+     */
     int idPizza;
 
+    /**
+     * Ingredient id.
+     */
     int idIngredient;
 
+    /**
+     * Pizza object.
+     */
     Pizza pizza;
 
+    /**
+     * List of pizza's Ingredients.
+     */
     Set<String> ingredientsSet;
 
 }

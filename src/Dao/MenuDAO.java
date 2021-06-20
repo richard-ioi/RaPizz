@@ -44,13 +44,10 @@ public class MenuDAO {
         return ingredients;
     }
     public List<List<String>> convertIngredientIdToName(){
-        //Statement statement = JdbcConnectDB.getConnection().createStatement();
         List<List<String>> ingredients = new ArrayList<>();
         IngredientsDAO ingredientsDAO = new IngredientsDAO();
-        //String sqlQuery = " SELECT id_ingredient FROM Pizza_Ingredients WHERE id_pizza ="+pizzaId;
 
         for(int i=1; i<= pizzaDAO.pizzaCount(); i++){
-            //temp.clear();
             List<String> temp = new ArrayList<>();
             for(int j=0; j< findIngredients(i).size(); j++){
                 temp.add(ingredientsDAO.findIngredientsById(this.findIngredients(i).get(j)).getNom());
@@ -58,23 +55,6 @@ public class MenuDAO {
             }
             ingredients.add(temp);
         }
-        //logger.debug(ingredients);
-/*        try {
-            logger.debug("executing query : "+ sqlQuery);
-            ResultSet resultSet = statement.executeQuery(sqlQuery);
-            while(resultSet.next()){
-                ingredients.add(""+resultSet.getInt("id_ingredient"));
-                logger.debug(ingredients);
-
-            }
-        } catch (SQLException sqlException){
-            logger.error("error executing: "+sqlQuery, sqlException);
-        } finally {
-            if(statement != null) try {
-                statement.close();
-            }catch (SQLException e){}
-
-        }*/
         return ingredients;
     }
 
