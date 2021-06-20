@@ -28,6 +28,7 @@ Notre IHM se compose de 5 onglets :
  afficher les détails du champ dans une JTable en bas de l'IHM.
 ![](commandes.png)
 - Statistiques globales, regroupant des statistiques utiles pour le suivi du business (chiffre d'affaires, client le plus actif etc).
+![](stats.png)
 - La liste des clients, avec en vert les clients les plus rentables.
 ![](clients.png)
 - Données brutes, onglet qui permet de saisir des requêtes SQL dans un champ afin de connaître en détails la composition de la base de données.
