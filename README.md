@@ -11,6 +11,10 @@ Projet de base de données représentant la gestion d'une entreprise de fabricat
 Sous mysql, lancer le script create_tables.sql qui permet de créer la base de données et les tables correspondantes au projet.
 Lancer ensuite le script insert_data.sql pour insérer les données des clients, pizzas, ingrédients etc dans les tables.
 
+Voici les identifiants utilisés pour se connecter à la base:
+**USER** : Admin
+**PASSWORD :**  RichardEtEmilyMeritentUn20sur20
+
 **Présentation du modèle de la base**
 ![](schema.png)
 
