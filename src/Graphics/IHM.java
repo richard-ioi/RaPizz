@@ -93,10 +93,10 @@ public class IHM extends JFrame implements ActionListener {
 
     public void createClientsWindow(){
         clientsWindow=new JPanel();
-       // clientsWindow.setLayout(new FlowLayout(FlowLayout.CENTER));
+        clientsWindow.setLayout(new FlowLayout(FlowLayout.CENTER));
         ScrollPane clientsList=new ScrollPane();
         clientsList.add(clientsInnerPanel);
-        clientsList.setPreferredSize(new Dimension(LargeurFenetre-10,(HauteurFenetre)));
+        clientsList.setPreferredSize(new Dimension(LargeurFenetre-10,(HauteurFenetre/3)*2));
         clientsWindow.add(clientsList);
     }
 
