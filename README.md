@@ -7,10 +7,10 @@ Projet de base de données représentant la gestion d'une entreprise de fabricat
 
 * Faire fonctionner la base de données
 
-- Sous mysql, lancer le script create_tables.sql qui permet de créer la base de données et les tables correspondantes au projet.
-- Lancer ensuite le script insert_data.sql pour insérer les données des clients, pizzas, ingrédients etc dans les tables.
+Sous mysql, lancer le script create_tables.sql qui permet de créer la base de données et les tables correspondantes au projet.
+Lancer ensuite le script insert_data.sql pour insérer les données des clients, pizzas, ingrédients etc dans les tables.
 
 * Présentation du modèle 
 
-Notre projet suit le modèle MVC avec nos classes "modèle"
-
+Notre projet suit le modèle MVC avec nos classes "modèle" pour le MODEL, la classe IHM pour la VIEW et JdbcConnectDB le CONTROLER, la classe principale 
+via laquelle se lance le programme.
