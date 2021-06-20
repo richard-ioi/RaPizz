@@ -64,7 +64,7 @@ public class VehiculeDAO {
         List<Integer> commandeVehicule = getVehiculeFromTable("Commande");
         List<Integer> vehiculeVehicule = getVehiculeFromTable("Vehicule");
         String name ="";
-        for(int i=0; i<Math.max(commandeVehicule.size(), vehiculeVehicule.size())-1; i++){
+        for(int i=0; i<3; i++){
             if(commandeVehicule.contains(vehiculeVehicule.get(i))){
                 continue;
             }

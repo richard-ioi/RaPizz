@@ -38,6 +38,11 @@ public class PizzaDAO {
         return pizzaList.get(0);
 
     }
+
+    /**
+     * Amount of pizzas on menu.
+     * @return
+     */
     public int pizzaCount(){
         try{
             Statement statement = JdbcConnectDB.getConnection().createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -51,6 +56,12 @@ public class PizzaDAO {
         }
         return 0;
     }
+
+    /**
+     * Get's price of pizza depending on size.
+     * @param idPizza
+     * @return
+     */
     public HashMap<String, Double> getPizzaPrice(int idPizza){
         double prix = (double)findPizzaById(idPizza).getPrix();
         HashMap<String, Double> prixTaille = new HashMap();
@@ -59,6 +70,12 @@ public class PizzaDAO {
         prixTaille.put("ogresse", (double)Math.round((prix+prix*0.33)*100)/100);
         return prixTaille;
     }
+
+    /**
+     * Finds pizza linked to request.
+     * @param query
+     * @return
+     */
     @SneakyThrows
     public List<Pizza> find(String query) /*throws SQLException*/ {
         List<Pizza> pizzaList = new ArrayList<>();
@@ -83,6 +100,11 @@ public class PizzaDAO {
         return pizzaList;
     }
 
+    /**
+     * Finds id of most popular pizza.
+     * @param order
+     * @return
+     */
     @SneakyThrows
     public int popularId(String order){
         int pizza = 1;
@@ -105,11 +127,20 @@ public class PizzaDAO {
         }
         return pizza;
     }
+
+    /**
+     * Finds most popular pizza.
+     * @return
+     */
     @SneakyThrows
     public Pizza mostPopularPizza(){
         return findPizzaById(popularId("DESC"));
     }
 
+    /**
+     * Finds least popular pizza.
+     * @return
+     */
     public String leastPopularPizza(){
         if(findPizzaById(popularId("ASC")) != mostPopularPizza()){
             return findPizzaById(popularId("ASC")).getNom();
@@ -117,6 +148,12 @@ public class PizzaDAO {
         return null;
     }
 
+    /**
+     * Converts sesultSet to Pizza object.
+     * @param resultSet
+     * @return
+     * @throws SQLException
+     */
     private Pizza resultSetToPizza(ResultSet resultSet) throws SQLException{
         Pizza pizza = null;
 

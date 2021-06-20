@@ -20,6 +20,11 @@ public class MenuDAO {
     private static HashMap<Integer, Menu> cache= new HashMap<Integer, Menu>();
     private PizzaDAO pizzaDAO = new PizzaDAO();
 
+    /**
+     * Finds ingredients in db.
+     * @param pizzaId
+     * @return
+     */
     @SneakyThrows
     public List<Integer> findIngredients(int pizzaId)  {
         Statement statement = JdbcConnectDB.getConnection().createStatement();
@@ -43,6 +48,11 @@ public class MenuDAO {
             }
         return ingredients;
     }
+
+    /**
+     * Creates list of pizza ingredients.
+     * @return
+     */
     public List<List<String>> convertIngredientIdToName(){
         List<List<String>> ingredients = new ArrayList<>();
         IngredientsDAO ingredientsDAO = new IngredientsDAO();
