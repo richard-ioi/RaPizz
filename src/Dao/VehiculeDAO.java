@@ -76,12 +76,6 @@ public class VehiculeDAO {
         return name;
     }
 
-
-    /**
-     * Gets all Vehicules related to the query param.
-     * @param query
-     * @return
-     */
     @SneakyThrows
     public List<Vehicule> find(String query) /*throws SQLException*/ {
         List<Vehicule> vehiculeList = new ArrayList<>();

@@ -2,6 +2,7 @@ package Dao;
 
 import DataAccess.JdbcConnectDB;
 import Domain.Ingredients;
+import Domain.Pizza;
 import lombok.SneakyThrows;
 import org.apache.log4j.Logger;
 
@@ -65,11 +66,6 @@ public class IngredientsDAO {
         return findIngredientsById(mostPopularIngredientId());
     }
 
-    /**
-     * Finds Ingredients related to query param
-     * @param query
-     * @return
-     */
     @SneakyThrows
     public List<Ingredients> find(String query) /*throws SQLException*/ {
         List<Ingredients> ingredientsList = new ArrayList<>();
