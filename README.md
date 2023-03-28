@@ -1,3 +1,5 @@
+*Travail réalisé dans le cadre d'un projet étudiant en première année du cycle ingénieur (E3) à ESIEE Paris dans la filière Informatique & Applications*
+
 # 3I_IN10_RaPizz
 **20_E3FI_3I_IN10 - Base de données**
 
